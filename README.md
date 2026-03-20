@@ -5,7 +5,7 @@
 ---
 
 ## ⚠️ Validación Técnica y Científica
-Este software ha sido calibrado y validado **exclusivamente** para su uso con limas de aleación **M-Wire RISING de Fanta-Dental**. 
+Este software ha sido calibrado y validado **exclusivamente** para su uso con limas RISING de Fanta-Dental**. 
 
 > [!IMPORTANT]
 > Las propiedades físicas, la memoria controlada y la resistencia a la fatiga cíclica varían drásticamente entre diferentes tratamientos térmicos. El uso de esta herramienta con otras aleaciones (NiTi convencional, Gold, Blue, etc.) puede generar cálculos de fatiga inexactos y comprometer la seguridad del procedimiento.
