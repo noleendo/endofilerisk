@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>EndoFile Risk v2.6</title>
+    <title>EndoFile Risk v2.5</title>
     
     <style>
         :root {
@@ -24,7 +24,7 @@
 
         header { 
             background: var(--primary); color: white; padding: 20px; text-align: center; 
-            font-weight: 800; font-size: 1.2rem;
+            font-weight: 800; font-size: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .container { padding: 15px; max-width: 480px; margin: auto; }
@@ -36,17 +36,18 @@
 
         h3 { margin: 0 0 15px 0; font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* INFORMACIÓN GENERAL (CUADROS VACÍOS) */
+        /* INFORMACIÓN GENERAL */
         .info-group { margin-bottom: 12px; }
-        .info-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; }
+        .info-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: var(--primary); }
         input[type="text"] { 
             width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; 
-            font-size: 1rem; box-sizing: border-box; outline: none;
+            font-size: 1rem; box-sizing: border-box; outline: none; transition: border 0.3s;
         }
+        input[type="text"]:focus { border-color: var(--accent); }
 
         /* SLIDERS TÁCTILES GRANDES */
         .control { margin-bottom: 20px; }
-        .label-row { display: flex; justify-content: space-between; font-weight: 700; }
+        .label-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.95rem; }
         .val-badge { color: var(--accent); font-size: 1.1rem; }
 
         input[type="range"] { 
@@ -54,7 +55,7 @@
             -webkit-appearance: none; margin: 18px 0;
         }
         input[type="range"]::-webkit-slider-thumb { 
-            -webkit-appearance: none; width: 36px; height: 36px; 
+            -webkit-appearance: none; width: 34px; height: 34px; /* TAMAÑO GRANDE */
             background: white; border: 4px solid var(--accent); border-radius: 50%;
             box-shadow: 0 3px 8px rgba(0,0,0,0.2); cursor: pointer;
         }
@@ -62,7 +63,7 @@
         /* BOTONES */
         button { 
             width: 100%; padding: 16px; border-radius: 12px; border: none; 
-            font-weight: 700; font-size: 1rem; cursor: pointer;
+            font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s;
         }
         #btn-toggle { background: var(--accent); color: white; margin-bottom: 10px; }
         .btn-reset { background: #95a5a6; color: white; }
@@ -74,19 +75,20 @@
             margin: 15px 0; transition: background 0.4s;
         }
         .rul-number { font-size: 4.2rem; font-weight: 900; display: block; line-height: 1; }
+        .status-txt { font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; }
 
-        /* HISTORIAL */
+        /* HISTORIAL TABLE-STYLE */
         .hist-list { max-height: 250px; overflow-y: auto; font-size: 0.85rem; border-top: 1px solid #eee; }
-        .hist-item { padding: 12px 0; border-bottom: 1px solid #f1f1f1; display: grid; grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr; gap: 5px; }
-        .hist-full-row { grid-column: span 4; color: #95a5a6; font-size: 0.7rem; margin-top: 3px; }
+        .hist-item { padding: 12px 0; border-bottom: 1px solid #f1f1f1; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 5px; }
+        .hist-date { grid-column: span 3; color: #95a5a6; font-size: 0.7rem; margin-top: 3px; }
 
-        footer { text-align: center; padding: 30px 10px; color: #95a5a6; font-size: 0.8rem; }
+        footer { text-align: center; padding: 30px 10px; color: #95a5a6; font-size: 0.8rem; line-height: 1.5; }
     </style>
 </head>
 
 <body>
 
-<header>🦷 EndoFile Risk v2.6</header>
+<header>🦷 EndoFile Risk v2.5</header>
 
 <div class="container">
     
@@ -94,55 +96,62 @@
         <h3>Información General</h3>
         <div class="info-group">
             <label>Especialista en endodoncia:</label>
-            <input type="text" id="esp_nombre" oninput="saveInfo()">
+            <input type="text" id="especialista" oninput="saveInfo()">
         </div>
         <div class="info-group">
             <label>Sistema rotatorio utilizado:</label>
-            <input type="text" id="esp_sistema" oninput="saveInfo()">
+            <input type="text" id="sistema" oninput="saveInfo()">
         </div>
     </div>
 
     <div class="card">
         <h3>Configuración de la Lima</h3>
+        
         <div class="control">
-            <div class="label-row">ISO <span class="val-badge" id="d_v">0.10</span></div>
+            <div class="label-row">Diámetro ISO <span class="val-badge" id="d_val">0.10</span></div>
             <input type="range" id="d" min="0.10" max="0.45" step="0.01" value="0.10" oninput="calc()">
         </div>
+
         <div class="control">
-            <div class="label-row">Conicidad <span class="val-badge" id="c_v">0.02</span></div>
+            <div class="label-row">Conicidad <span class="val-badge" id="c_val">0.02</span></div>
             <input type="range" id="c" min="0.02" max="0.12" step="0.01" value="0.02" oninput="calc()">
         </div>
+
         <div class="control">
-            <div class="label-row">Curvatura <span class="val-badge" id="curv_v">Leve</span></div>
+            <div class="label-row">Curvatura <span class="val-badge" id="curv_val">Leve</span></div>
             <input type="range" id="curv" min="1" max="3" value="1" oninput="calc()">
         </div>
+
         <div class="control">
-            <div class="label-row">Torque <span class="val-badge" id="trq_v">1.0</span></div>
+            <div class="label-row">Torque (Ncm) <span class="val-badge" id="trq_val">1.0</span></div>
             <input type="range" id="trq" min="1.0" max="5.5" step="0.1" value="1.0" oninput="calc()">
         </div>
+
         <div class="control">
-            <div class="label-row">Tiempo <span class="val-badge" id="t_v">0s</span></div>
+            <div class="label-row">Tiempo (seg) <span class="val-badge" id="t_val">0</span></div>
             <input type="range" id="t" min="0" max="180" value="0" oninput="manualTime()">
         </div>
+
         <button id="btn-toggle" onclick="toggleTimer()">▶ INICIAR CRONÓMETRO</button>
         <button class="btn-reset" onclick="resetCalc()">🔄 REINICIAR TODO</button>
     </div>
 
     <div id="res-panel" style="background: var(--success);">
-        <div id="st_label" style="font-weight: 800; letter-spacing: 2px;">LISTO</div>
+        <div class="status-txt" id="st_label">LISTO</div>
         <span class="rul-number" id="rul_val_big">10</span>
         <div style="font-weight: 700;">USOS RESTANTES</div>
-        <div id="fatiga_val" style="margin-top: 10px; font-size: 0.8rem;">Fatiga: 0.0%</div>
+        <div id="fatiga_val" style="margin-top: 10px; font-size: 0.8rem; opacity: 0.9;">Índice de Fatiga: 0.0%</div>
     </div>
 
-    <button class="btn-save" onclick="guardarCaso()">💾 GUARDAR REGISTRO</button>
+    <button class="btn-save" onclick="guardarCaso()">💾 GUARDAR REGISTRO CLÍNICO</button>
 
     <div class="card">
         <h3>Registro de Actividad</h3>
         <div id="historial" class="hist-list"></div>
+        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
-            <button style="background:var(--primary); color:white;" onclick="generarReporte()">📊 REPORTE</button>
-            <button style="background:#dfe6e9; color:var(--primary);" onclick="exportarCSV()">📥 CSV</button>
+            <button style="background:var(--primary); color:white; font-size:0.8rem;" onclick="generarReporte()">📊 REPORTE</button>
+            <button style="background:#dfe6e9; color:var(--primary); font-size:0.8rem;" onclick="exportarCSV()">📥 CSV</button>
         </div>
         <button style="background:none; color:var(--danger); font-size:0.7rem; margin-top:15px;" onclick="borrarTodo()">BORRAR HISTORIAL</button>
     </div>
@@ -154,23 +163,26 @@
 </div>
 
 <script>
-let tiempo = 0, corriendo = false, timerRef = null, db;
+let tiempo = 0, corriendo = false, timerRef = null;
+let db;
 
-const request = indexedDB.open("EndoRiskDB", 2);
+// IndexedDB para almacenamiento robusto
+const request = indexedDB.open("EndoRiskDB", 1);
 request.onupgradeneeded = e => {
     db = e.target.result;
-    if(!db.objectStoreNames.contains("casos")) db.createObjectStore("casos", { keyPath: "id", autoIncrement: true });
+    db.createObjectStore("casos", { keyPath: "id", autoIncrement: true });
 };
 request.onsuccess = e => { db = e.target.result; cargarHistorial(); };
 
+// Persistencia de información general
 function saveInfo() {
-    localStorage.setItem('esp_n', document.getElementById('esp_nombre').value);
-    localStorage.setItem('esp_s', document.getElementById('esp_sistema').value);
+    localStorage.setItem('esp', document.getElementById('especialista').value);
+    localStorage.setItem('sis', document.getElementById('sistema').value);
 }
 
 function loadInfo() {
-    document.getElementById('esp_nombre').value = localStorage.getItem('esp_n') || "";
-    document.getElementById('esp_sistema').value = localStorage.getItem('esp_s') || "";
+    document.getElementById('especialista').value = localStorage.getItem('esp') || "";
+    document.getElementById('sistema').value = localStorage.getItem('sis') || "";
 }
 
 function calc() {
@@ -179,10 +191,10 @@ function calc() {
     const crv = parseInt(document.getElementById('curv').value);
     const trq = parseFloat(document.getElementById('trq').value);
 
-    document.getElementById('d_v').innerText = iso.toFixed(2);
-    document.getElementById('c_v').innerText = con.toFixed(2);
-    document.getElementById('trq_v').innerText = trq.toFixed(1);
-    document.getElementById('t_v').innerText = tiempo + "s";
+    document.getElementById('d_val').innerText = iso.toFixed(2);
+    document.getElementById('c_val').innerText = con.toFixed(2);
+    document.getElementById('trq_val').innerText = trq.toFixed(1);
+    document.getElementById('t_val').innerText = tiempo;
     document.getElementById('t').value = tiempo;
 
     let fC = crv == 1 ? 1.0 : (crv == 2 ? 1.5 : 2.2);
@@ -190,17 +202,21 @@ function calc() {
 
     let score = 100 * (0.45 * Math.pow(tiempo/60, 1.3) + 0.30 * (trq/5) + 0.25 * (((iso-0.20)/0.20 + (con-0.02)/0.08)/2));
     score = Math.min(Math.max(score * fC, 0), 100);
+    
     const rul = Math.max(Math.floor((100 - score) / 10), 0);
     
     const panel = document.getElementById('res-panel');
-    if(rul >= 7) panel.style.background = 'var(--success)';
-    else if(rul >= 4) panel.style.background = 'var(--warning)';
-    else if(rul >= 1) panel.style.background = '#e67e22';
-    else panel.style.background = 'var(--primary)';
+    const st = document.getElementById('st_label');
+    
+    if(rul >= 7) { panel.style.background = 'var(--success)'; st.innerText = "REUTILIZABLE"; }
+    else if(rul >= 4) { panel.style.background = 'var(--warning)'; st.innerText = "PRECAUCIÓN"; }
+    else if(rul >= 1) { panel.style.background = '#e67e22'; st.innerText = "CRÍTICO"; }
+    else { panel.style.background = 'var(--primary)'; st.innerText = "DESCARTAR"; }
 
     document.getElementById('rul_val_big').innerText = rul;
     document.getElementById('fatiga_val').innerText = `Índice de Fatiga: ${score.toFixed(1)}%`;
-    return { s: score.toFixed(1), r: rul, iso, con };
+
+    return { score: score.toFixed(1), rul, iso, con };
 }
 
 function toggleTimer() {
@@ -229,10 +245,13 @@ function guardarCaso() {
     const tx = db.transaction("casos", "readwrite");
     const store = tx.objectStore("casos");
     store.add({
-        f: new Date().toLocaleString('es-PE', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }),
-        l: res.iso.toFixed(2), c: res.con.toFixed(2), s: res.s, r: res.r, t: tiempo
+        f: new Date().toLocaleString('es-PE', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' }),
+        l: res.iso.toFixed(2),
+        c: res.con.toFixed(2),
+        s: res.score,
+        r: res.rul
     });
-    tx.oncomplete = () => { cargarHistorial(); alert("Registro guardado con éxito."); };
+    tx.oncomplete = () => cargarHistorial();
 }
 
 function cargarHistorial() {
@@ -240,45 +259,47 @@ function cargarHistorial() {
     const store = tx.objectStore("casos");
     const req = store.getAll();
     req.onsuccess = () => {
-        document.getElementById('historial').innerHTML = req.result.reverse().map(i => `
+        const data = req.result;
+        document.getElementById('historial').innerHTML = data.reverse().map(i => `
             <div class="hist-item">
-                <span><b>${i.l}/${i.c}</b></span>
-                <span style="text-align:center">${i.s}%</span>
-                <span style="text-align:center"><b>R:${i.r}</b></span>
-                <span style="text-align:right">${i.t}s</span>
-                <div class="hist-full-row">Registro: ${i.f}</div>
+                <span><b>Lima ${i.l}</b></span>
+                <span style="text-align:center">Fatiga: ${i.s}%</span>
+                <span style="text-align:right">Restan: <b>${i.r}</b></span>
+                <div class="hist-date">Conicidad: ${i.c} | ${i.f}</div>
             </div>
         `).join('') || "<p style='text-align:center; color:#999; padding:20px;'>Sin registros</p>";
     };
 }
 
+// REPORTE ACADÉMICO (3 LÍNEAS - FORMATO CIENCIA)
 function generarReporte() {
     const tx = db.transaction("casos", "readonly");
     const store = tx.objectStore("casos");
     const req = store.getAll();
     req.onsuccess = () => {
         const h = req.result;
-        const esp = document.getElementById('esp_nombre').value || "Dr. Christian Nole";
-        const sis = document.getElementById('esp_sistema').value || "Rising (Fanta-Dental)";
+        const esp = document.getElementById('especialista').value || "Especialista no indicado";
+        const sis = document.getElementById('sistema').value || "Sistema no indicado";
+        
         const win = window.open('', '_blank');
         win.document.write(`
-            <html><head><title>Reporte Académico</title><style>
-                body { font-family: 'Times New Roman', serif; padding: 40px; }
-                h2 { text-align: center; }
-                .meta { text-align: center; border-bottom: 1px double #000; padding-bottom: 10px; margin-bottom: 30px; }
-                table { width: 100%; border-collapse: collapse; }
-                th { border-top: 2px solid black; border-bottom: 1px solid black; padding: 10px; text-align: left; }
-                td { padding: 10px; font-size: 0.9rem; }
-                tr:last-child td { border-bottom: 2px solid black; }
-                .foot { margin-top: 40px; font-size: 0.8rem; text-align: right; }
+            <html><head><title>Reporte</title><style>
+                body { font-family: 'Times New Roman', serif; padding: 50px; }
+                h2 { text-align: center; margin-bottom: 5px; }
+                .meta { text-align: center; margin-bottom: 40px; border-bottom: 1px double #000; padding-bottom: 10px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th { border-top: 2pt solid black; border-bottom: 1pt solid black; padding: 12px; text-align: left; }
+                td { padding: 10px; font-size: 0.95rem; }
+                tr:last-child td { border-bottom: 2pt solid black; }
+                .foot { margin-top: 40px; font-size: 0.8rem; text-align: right; font-style: italic; }
             </style></head><body>
                 <h2>REPORTE CLÍNICO DE FATIGA INSTRUMENTAL</h2>
                 <div class="meta">Especialista: Dr. ${esp} | Sistema: ${sis}</div>
                 <table>
-                    <thead><tr><th>LIMA</th><th>TIEMPO(s)</th><th>FATIGA%</th><th>USOS REST.</th><th>FECHA</th></tr></thead>
-                    <tbody>${h.map(i => `<tr><td>${i.l}/${i.c}</td><td>${i.t}s</td><td>${i.s}%</td><td>${i.r}</td><td>${i.f}</td></tr>`).join('')}</tbody>
+                    <thead><tr><th>LIMA</th><th>CONICIDAD</th><th>FATIGA %</th><th>USOS REST.</th><th>FECHA</th></tr></thead>
+                    <tbody>${h.map(i => `<tr><td>Lima ${i.l}</td><td>${i.c}</td><td>${i.s}%</td><td>${i.r}</td><td>${i.f}</td></tr>`).join('')}</tbody>
                 </table>
-                <div class="foot">Generado por EndoFile Risk v2.6 | Lima-PERU</div>
+                <div class="foot">EndoFile Risk v2.5 | Desarrollado por Christian Nole (Lima-PERU)</div>
             </body></html>
         `);
         win.document.close();
@@ -290,17 +311,17 @@ function exportarCSV() {
     const store = tx.objectStore("casos");
     const req = store.getAll();
     req.onsuccess = () => {
-        let csv = "\uFEFFESPECIALISTA," + document.getElementById('esp_nombre').value + "\nSISTEMA," + document.getElementById('esp_sistema').value + "\n\nLIMA,TIEMPO(s),FATIGA,USOS_REST,FECHA\n";
-        req.result.forEach(i => { csv += `${i.l}/${i.c},${i.t},${i.s}%,${i.r},${i.f}\n`; });
+        let csv = "\uFEFFESPECIALISTA," + document.getElementById('especialista').value + "\nSISTEMA," + document.getElementById('sistema').value + "\n\nLIMA,CONICIDAD,FATIGA,USOS_REST,FECHA\n";
+        req.result.forEach(i => { csv += `Lima ${i.l},${i.c},${i.s}%,${i.r},${i.f}\n`; });
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "Reporte_EndoRisk_v26.csv";
+        a.download = "Reporte_Clinico_EndoRisk.csv";
         a.click();
     };
 }
 
-function borrarTodo() { if(confirm("¿Borrar historial?")) { const tx = db.transaction("casos", "readwrite"); tx.objectStore("casos").clear(); tx.oncomplete = () => cargarHistorial(); } }
+function borrarTodo() { if(confirm("¿Borrar historial clínico?")) { const tx = db.transaction("casos", "readwrite"); tx.objectStore("casos").clear(); tx.oncomplete = () => cargarHistorial(); } }
 
 loadInfo();
 calc();
