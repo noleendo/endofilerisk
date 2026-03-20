@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>EndoFile Risk LEGACY v1.6</title>
+<title>EndoFile Risk LEGACY v1.7</title>
 
 <style>
 /* CSS PARA iPAD MINI 1 */
@@ -12,8 +12,12 @@ body { font-family: Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f4
 header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; }
 .container { padding: 10px; max-width: 420px; margin: auto; }
 .card { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 12px; }
+h3 { margin: 0 0 10px 0; font-size: 0.8rem; color: #666; text-transform: uppercase; }
 
-/* CONTROLES TÁCTILES */
+/* NUEVOS CUADROS DE TEXTO DE ESPECIALISTA */
+.info-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 0.9rem; }
+
+/* CONTROLES TÁCTILES SLIDERS */
 input[type="range"] { width: 100%; height: 45px; margin: 10px 0; -webkit-appearance: none; background: #dfe6e9; border-radius: 10px; }
 input[type="range"]::-webkit-slider-thumb { 
     -webkit-appearance: none; width: 38px; height: 38px; background: #3498db; border-radius: 50%; border: 2px solid #fff; 
@@ -35,7 +39,7 @@ button { display: block; width: 100%; padding: 18px; border-radius: 12px; border
 .hist-item { padding: 10px 0; border-bottom: 1px solid #eee; }
 
 .disclaimer { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 10px; border-radius: 8px; font-size: 0.7rem; margin-top: 15px; text-align: justify; }
-footer { text-align: center; font-size: 0.75rem; color: #95a5a6; padding: 25px 10px; line-height: 1.4; }
+footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 25px 10px; line-height: 1.4; }
 </style>
 </head>
 
@@ -44,6 +48,15 @@ footer { text-align: center; font-size: 0.75rem; color: #95a5a6; padding: 25px 1
 <header>🦷 EndoFile Risk LEGACY</header>
 
 <div class="container">
+    <div class="card">
+        <h3>Información del Especialista</h3>
+        <label>Especialista en Endodoncia:</label>
+        <input type="text" id="esp_nombre" placeholder="Ingresa tu Nombre Completo" class="info-input" onchange="guardarInfoEspecialista()">
+        
+        <label>Sistema Rotatorio Utilizado:</label>
+        <input type="text" id="esp_sistema" placeholder="Ej. Rising Fanta-Dental" class="info-input" onchange="guardarInfoEspecialista()">
+    </div>
+
     <div class="card">
         <h3>Configuración de Lima</h3>
         <label>ISO: <span class="val" id="d_v">0.10</span></label>
@@ -82,12 +95,12 @@ footer { text-align: center; font-size: 0.75rem; color: #95a5a6; padding: 25px 1
     </div>
 
     <div class="disclaimer">
-        <strong>AVISO LEGAL:</strong> Herramienta experimental basada en datos clínicos del sistema RISING. El desarrollador no asume responsabilidad por accidentes operatorios derivados del uso de este software.
+        <strong>AVISO LEGAL:</strong> Herramienta de apoyo clínico basada en el sistema RISING. El desarrollador no asume responsabilidad por accidentes operatorios derivados del uso de este software.
     </div>
 
     <footer>
         © 2026 Desarrollado por <b>Christian Nole</b><br>
-         <b>Lima - PERU</b>
+        <b>Lima - PERU</b>
     </footer>
 </div>
 
@@ -105,6 +118,23 @@ function formatFecha(f) {
     var hora = ("0" + d.getHours()).slice(-2);
     var min = ("0" + d.getMinutes()).slice(-2);
     return dia + "/" + mes + "/" + ano + " " + hora + ":" + min;
+}
+
+// FUNCIONES PARA CARGAR Y GUARDAR LA INFO DEL ESPECIALISTA
+function cargarInfoEspecialista() {
+    var nombreSaved = localStorage.getItem("endoSpecialistName");
+    var sistemaSaved = localStorage.getItem("endoSystemName");
+    
+    if (nombreSaved) { document.getElementById("esp_nombre").value = nombreSaved; }
+    if (sistemaSaved) { document.getElementById("esp_sistema").value = sistemaSaved; }
+}
+
+function guardarInfoEspecialista() {
+    var nombreInput = document.getElementById("esp_nombre").value;
+    var sistemaInput = document.getElementById("esp_sistema").value;
+    
+    localStorage.setItem("endoSpecialistName", nombreInput);
+    localStorage.setItem("endoSystemName", sistemaInput);
 }
 
 function calc() {
@@ -164,10 +194,14 @@ function mostrarHistorial() {
 
 function borrarTodo() { if(confirm("¿Borrar historial?")) { localStorage.removeItem("endoHistorial"); mostrarHistorial(); } }
 
-// FUNCIÓN CREATIVA: REPORTE CON FORMATO DE TABLA ACADÉMICA (3 LÍNEAS)
+// FUNCIÓN CREATIVA: REPORTE DINÁMICO CON ESTILO ACADÉMICO (3 LÍNEAS)
 function generarReporte() {
     var h = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
     if(h.length === 0) { alert("No hay datos."); return; }
+
+    // OBTENER LA INFO DEL ESPECIALISTA (O PONER PREDETERMINADO)
+    var especialista = document.getElementById("esp_nombre").value || "[Ingresar Especialista]";
+    var sistema = document.getElementById("esp_sistema").value || "[Ingresar Sistema]";
 
     var htmlReporte = "<html><head><title>Reporte EndoRisk</title><style>" +
         "body { font-family: 'Times New Roman', serif; padding: 40px; color: #000; }" +
@@ -179,7 +213,8 @@ function generarReporte() {
         ".last-row td { border-bottom: 2px solid black; padding-bottom: 10px; }" +
         "</style></head><body>" +
         "<h2>REPORTE CLÍNICO DE FATIGA INSTRUMENTAL</h2>" +
-        "<p>Investigador: Dr. Christian Nole | Sistema: RISING (Fanta-Dental)</p>" +
+        // CABECERA DEL REPORTE DINÁMICA
+        "<p>Especialista: Dr. " + especialista + " | Sistema: " + sistema + "</p>" +
         "<table><thead><tr><th>LIMA (ISO/T)</th><th>FATIGA %</th><th>USOS REST.</th><th>FECHA Y HORA</th></tr></thead><tbody>";
 
     for (var i = 0; i < h.length; i++) {
@@ -192,7 +227,7 @@ function generarReporte() {
     }
 
     htmlReporte += "</tbody></table>" +
-        "<div style='margin-top:40px; font-size:0.8rem; text-align:right;'>Generado automáticamente por EndoFile Risk Legacy v1.6</div>" +
+        "<div style='margin-top:40px; font-size:0.8rem; text-align:right;'>Generado automáticamente por EndoFile Risk Legacy v1.7 | Desarrollado por Christian Nole (Lima-PERU)</div>" +
         "</body></html>";
 
     var uri = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlReporte);
@@ -201,6 +236,8 @@ function generarReporte() {
 
 function manualTime() { tiempo = parseInt(document.getElementById("t").value); calc(); }
 
+// INICIALIZACIÓN
+cargarInfoEspecialista(); // Cargar la info del especialista guardada
 calc();
 mostrarHistorial();
 </script>
