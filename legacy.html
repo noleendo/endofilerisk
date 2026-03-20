@@ -4,23 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>EndoFile Risk LEGACY v1.7</title>
+<title>EndoFile Risk LEGACY v1.8</title>
 
 <style>
-/* CSS PARA iPAD MINI 1 */
+/* CSS COMPATIBLE iOS 9 */
 body { font-family: Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f4; color: #333; }
 header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; }
 .container { padding: 10px; max-width: 420px; margin: auto; }
 .card { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 12px; }
 h3 { margin: 0 0 10px 0; font-size: 0.8rem; color: #666; text-transform: uppercase; }
 
-/* NUEVOS CUADROS DE TEXTO DE ESPECIALISTA */
-.info-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 0.9rem; }
+/* INPUTS DE INFORMACIÓN */
+.info-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 0.9rem; box-sizing: border-box; }
 
-/* CONTROLES TÁCTILES SLIDERS */
-input[type="range"] { width: 100%; height: 45px; margin: 10px 0; -webkit-appearance: none; background: #dfe6e9; border-radius: 10px; }
+/* SLIDERS GRANDES PARA iPAD MINI 1 */
+input[type="range"] { width: 100%; height: 40px; margin: 10px 0; -webkit-appearance: none; background: #ddd; border-radius: 10px; }
 input[type="range"]::-webkit-slider-thumb { 
-    -webkit-appearance: none; width: 38px; height: 38px; background: #3498db; border-radius: 50%; border: 2px solid #fff; 
+    -webkit-appearance: none; width: 35px; height: 35px; background: #3498db; border-radius: 50%; border: 2px solid #fff; 
 }
 
 label { display: block; font-weight: bold; font-size: 1rem; }
@@ -35,10 +35,11 @@ button { display: block; width: 100%; padding: 18px; border-radius: 12px; border
 #res { padding: 25px; border-radius: 15px; color: white; text-align: center; background: #27ae60; margin-bottom: 15px; }
 .big { font-size: 3.5rem; font-weight: bold; display: block; }
 
+/* HISTORIAL CON TIEMPO */
 .hist { font-size: 0.85rem; border-top: 1px solid #eee; margin-top: 10px; max-height: 200px; overflow-y: scroll; }
 .hist-item { padding: 10px 0; border-bottom: 1px solid #eee; }
+.hist-item b { color: #2c3e50; }
 
-.disclaimer { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 10px; border-radius: 8px; font-size: 0.7rem; margin-top: 15px; text-align: justify; }
 footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 25px 10px; line-height: 1.4; }
 </style>
 </head>
@@ -49,16 +50,16 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 25px 10
 
 <div class="container">
     <div class="card">
-        <h3>Información del Especialista</h3>
-        <label>Especialista en Endodoncia:</label>
-        <input type="text" id="esp_nombre" placeholder="Ingresa tu Nombre Completo" class="info-input" onchange="guardarInfoEspecialista()">
+        <h3>Información General</h3>
+        <label>Especialista en endodoncia:</label>
+        <input type="text" id="esp_nombre" class="info-input" onchange="saveSettings()">
         
-        <label>Sistema Rotatorio Utilizado:</label>
-        <input type="text" id="esp_sistema" placeholder="Ej. Rising Fanta-Dental" class="info-input" onchange="guardarInfoEspecialista()">
+        <label>Sistema rotatorio utilizado:</label>
+        <input type="text" id="esp_sistema" class="info-input" onchange="saveSettings()">
     </div>
 
     <div class="card">
-        <h3>Configuración de Lima</h3>
+        <h3>Configuración de la Lima</h3>
         <label>ISO: <span class="val" id="d_v">0.10</span></label>
         <input type="range" id="d" min="0.10" max="0.40" step="0.01" value="0.10" onchange="calc()" oninput="calc()">
 
@@ -71,11 +72,11 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 25px 10
         <label>Torque: <span class="val" id="torque_v">1.0</span></label>
         <input type="range" id="torque" min="1" max="5" step="0.1" value="1.0" onchange="calc()" oninput="calc()">
 
-        <label>Tiempo (seg): <span class="val" id="t_v">0</span></label>
+        <label>Tiempo: <span class="val" id="t_v">0s</span></label>
         <input type="range" id="t" min="0" max="120" value="0" onchange="manualTime()" oninput="manualTime()">
 
         <button id="btn-toggle" onclick="toggleTimer()">▶ INICIAR CRONÓMETRO</button>
-        <button class="btn-reset" onclick="resetTodo()">🔄 REINICIAR TODO (CLEAR)</button>
+        <button class="btn-reset" onclick="resetTodo()">🔄 REINICIAR TODO</button>
     </div>
 
     <div id="res">
@@ -90,12 +91,8 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 25px 10
     <div class="card">
         <h3>Registro de Actividad</h3>
         <div id="lista" class="hist"></div>
-        <button class="btn-report" onclick="generarReporte()">📊 GENERAR REPORTE ACADÉMICO</button>
-        <button style="background:none; color:red; font-size:0.7rem; width:100%; margin-top:10px;" onclick="borrarTodo()">BORRAR TODO EL HISTORIAL</button>
-    </div>
-
-    <div class="disclaimer">
-        <strong>AVISO LEGAL:</strong> Herramienta de apoyo clínico basada en el sistema RISING. El desarrollador no asume responsabilidad por accidentes operatorios derivados del uso de este software.
+        <button class="btn-report" onclick="generarReporte()">📊 GENERAR REPORTE</button>
+        <button style="background:none; color:red; font-size:0.7rem; width:100%; margin-top:10px;" onclick="borrarTodo()">BORRAR HISTORIAL</button>
     </div>
 
     <footer>
@@ -105,11 +102,11 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 25px 10
 </div>
 
 <script>
+/* JS ES5 PARA iPAD MINI 1 */
 var tiempo = 0;
 var corriendo = false;
 var timerRef = null;
 
-// FORMATEADOR DE FECHA CORTA (DD/MM/AA HH:MM)
 function formatFecha(f) {
     var d = new Date(f);
     var dia = ("0" + d.getDate()).slice(-2);
@@ -120,21 +117,14 @@ function formatFecha(f) {
     return dia + "/" + mes + "/" + ano + " " + hora + ":" + min;
 }
 
-// FUNCIONES PARA CARGAR Y GUARDAR LA INFO DEL ESPECIALISTA
-function cargarInfoEspecialista() {
-    var nombreSaved = localStorage.getItem("endoSpecialistName");
-    var sistemaSaved = localStorage.getItem("endoSystemName");
-    
-    if (nombreSaved) { document.getElementById("esp_nombre").value = nombreSaved; }
-    if (sistemaSaved) { document.getElementById("esp_sistema").value = sistemaSaved; }
+function saveSettings() {
+    localStorage.setItem("endoName", document.getElementById("esp_nombre").value);
+    localStorage.setItem("endoSys", document.getElementById("esp_sistema").value);
 }
 
-function guardarInfoEspecialista() {
-    var nombreInput = document.getElementById("esp_nombre").value;
-    var sistemaInput = document.getElementById("esp_sistema").value;
-    
-    localStorage.setItem("endoSpecialistName", nombreInput);
-    localStorage.setItem("endoSystemName", sistemaInput);
+function loadSettings() {
+    document.getElementById("esp_nombre").value = localStorage.getItem("endoName") || "";
+    document.getElementById("esp_sistema").value = localStorage.getItem("endoSys") || "";
 }
 
 function calc() {
@@ -147,7 +137,8 @@ function calc() {
     document.getElementById("d_v").innerHTML = ISO.toFixed(2);
     document.getElementById("c_v").innerHTML = CON.toFixed(2);
     document.getElementById("torque_v").innerHTML = TRQ.toFixed(1);
-    document.getElementById("t_v").innerHTML = tiempo;
+    document.getElementById("t_v").innerHTML = tiempo + "s";
+    document.getElementById("t").value = tiempo;
     document.getElementById("curv_v").innerHTML = (CRV==1?"Leve":(CRV==2?"Moderada":"Severa"));
 
     var score = 100 * (0.45 * Math.pow(tiempo/60, 1.3) + 0.30 * (TRQ/5) + 0.25 * (((ISO-0.20)/0.20 + (CON-0.02)/0.08)/2));
@@ -155,8 +146,7 @@ function calc() {
     var rul = Math.floor((100 - score) / 10);
 
     document.getElementById("res").style.backgroundColor = (rul<6?(rul<3?(rul<1?"#2c3e50":"#e67e22"):"#f39c12"):"#27ae60");
-    document.getElementById("rul").innerHTML = rul;
-    document.getElementById("st").innerHTML = (rul<6?(rul<3?(rul<1?"DESCARTAR":"CRÍTICO"):"PRECAUCIÓN"):"REUTILIZABLE");
+    document.getElementById("rul").innerHTML = (rul<0?0:rul);
     document.getElementById("fatiga").innerHTML = "Índice de Fatiga: " + score.toFixed(1) + "%";
     
     return { s: score.toFixed(1), r: (rul<0?0:rul), iso: ISO, con: CON };
@@ -178,7 +168,7 @@ function resetTodo() { if(corriendo) toggleTimer(); tiempo = 0; calc(); }
 function guardarRegistro() {
     var d = calc();
     var h = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
-    h.push({ f: new Date(), l: d.iso+"/"+d.con, s: d.s, r: d.r });
+    h.push({ f: new Date(), l: d.iso+"/"+d.con, s: d.s, r: d.r, t: tiempo });
     localStorage.setItem("endoHistorial", JSON.stringify(h));
     mostrarHistorial();
 }
@@ -187,47 +177,44 @@ function mostrarHistorial() {
     var h = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
     var html = "";
     for (var i = h.length - 1; i >= 0; i--) {
-        html += "<div class='hist-item'><strong>Lima " + h[i].l + "</strong> | Restan: " + h[i].r + " | <small>" + formatFecha(h[i].f) + "</small></div>";
+        html += "<div class='hist-item'><b>Lima " + h[i].l + "</b> | T: " + h[i].t + "s | Usos: " + h[i].r + "<br><small>" + formatFecha(h[i].f) + " | Fatiga: " + h[i].s + "%</small></div>";
     }
     document.getElementById("lista").innerHTML = html || "Sin registros.";
 }
 
 function borrarTodo() { if(confirm("¿Borrar historial?")) { localStorage.removeItem("endoHistorial"); mostrarHistorial(); } }
 
-// FUNCIÓN CREATIVA: REPORTE DINÁMICO CON ESTILO ACADÉMICO (3 LÍNEAS)
 function generarReporte() {
     var h = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
     if(h.length === 0) { alert("No hay datos."); return; }
 
-    // OBTENER LA INFO DEL ESPECIALISTA (O PONER PREDETERMINADO)
-    var especialista = document.getElementById("esp_nombre").value || "[Ingresar Especialista]";
-    var sistema = document.getElementById("esp_sistema").value || "[Ingresar Sistema]";
+    var especialista = document.getElementById("esp_nombre").value || "[Sin Nombre]";
+    var sistema = document.getElementById("esp_sistema").value || "[Sin Sistema]";
 
-    var htmlReporte = "<html><head><title>Reporte EndoRisk</title><style>" +
+    var htmlReporte = "<html><head><title>Reporte</title><style>" +
         "body { font-family: 'Times New Roman', serif; padding: 40px; color: #000; }" +
-        "h2 { text-align: center; margin-bottom: 5px; }" +
-        "p { text-align: center; font-size: 0.9rem; margin-bottom: 30px; }" +
-        "table { width: 100%; border-collapse: collapse; margin: auto; }" +
+        "h2 { text-align: center; }" +
+        "p { text-align: center; margin-bottom: 30px; }" +
+        "table { width: 100%; border-collapse: collapse; }" +
         "th { border-top: 2px solid black; border-bottom: 1px solid black; padding: 10px; text-align: left; }" +
-        "td { padding: 8px; font-size: 0.9rem; }" +
-        ".last-row td { border-bottom: 2px solid black; padding-bottom: 10px; }" +
+        "td { padding: 10px; font-size: 0.9rem; }" +
+        "tr:last-child td { border-bottom: 2px solid black; }" +
         "</style></head><body>" +
         "<h2>REPORTE CLÍNICO DE FATIGA INSTRUMENTAL</h2>" +
-        // CABECERA DEL REPORTE DINÁMICA
         "<p>Especialista: Dr. " + especialista + " | Sistema: " + sistema + "</p>" +
-        "<table><thead><tr><th>LIMA (ISO/T)</th><th>FATIGA %</th><th>USOS REST.</th><th>FECHA Y HORA</th></tr></thead><tbody>";
+        "<table><thead><tr><th>LIMA</th><th>TIEMPO(s)</th><th>FATIGA %</th><th>USOS REST.</th><th>FECHA</th></tr></thead><tbody>";
 
     for (var i = 0; i < h.length; i++) {
-        var clase = (i === h.length - 1) ? "class='last-row'" : "";
-        htmlReporte += "<tr " + clase + ">" +
+        htmlReporte += "<tr>" +
             "<td>" + h[i].l + "</td>" +
+            "<td>" + h[i].t + "s</td>" +
             "<td>" + h[i].s + "%</td>" +
             "<td>" + h[i].r + "</td>" +
             "<td>" + formatFecha(h[i].f) + "</td></tr>";
     }
 
     htmlReporte += "</tbody></table>" +
-        "<div style='margin-top:40px; font-size:0.8rem; text-align:right;'>Generado automáticamente por EndoFile Risk Legacy v1.7 | Desarrollado por Christian Nole (Lima-PERU)</div>" +
+        "<div style='margin-top:40px; font-size:0.8rem; text-align:right;'>EndoFile Risk Legacy v1.8 | Lima-PERU</div>" +
         "</body></html>";
 
     var uri = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlReporte);
@@ -236,8 +223,7 @@ function generarReporte() {
 
 function manualTime() { tiempo = parseInt(document.getElementById("t").value); calc(); }
 
-// INICIALIZACIÓN
-cargarInfoEspecialista(); // Cargar la info del especialista guardada
+loadSettings();
 calc();
 mostrarHistorial();
 </script>
