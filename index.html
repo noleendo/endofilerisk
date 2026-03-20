@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="manifest.json">
-    <title>EndoFile Risk v2.0</title>
+    <title>EndoFile Risk v2.1</title>
     
     <style>
         :root {
@@ -15,94 +13,78 @@
             --success: #27ae60;
             --warning: #f39c12;
             --danger: #e74c3c;
-            --dark: #2c3e50;
             --bg: #f0f2f5;
         }
 
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; background: var(--bg); color: #333; line-height: 1.6;
+            font-family: -apple-system, system-ui, sans-serif; 
+            margin: 0; background: var(--bg); color: #333; 
         }
 
         header { 
             background: var(--primary); color: white; padding: 20px; text-align: center; 
-            font-weight: 800; font-size: 1.4rem; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-weight: 800; font-size: 1.3rem;
         }
 
         .container { padding: 15px; max-width: 500px; margin: auto; }
 
         .card { 
             background: white; padding: 20px; border-radius: 15px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 15px;
         }
 
-        h3 { margin: 0 0 15px 0; font-size: 0.85rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
+        h3 { margin: 0 0 15px 0; font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* INPUTS DE ESPECIALISTA */
+        /* INPUTS LIMPIOS (SIN PLACEHOLDER) */
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 5px; }
         input[type="text"] { 
             width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; 
-            font-size: 1rem; box-sizing: border-box; transition: border 0.3s;
+            font-size: 1rem; box-sizing: border-box;
         }
-        input[type="text"]:focus { border-color: var(--accent); outline: none; }
 
-        /* SLIDERS MODERNOS */
-        .control { margin-bottom: 20px; }
-        .label-row { display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
-        .val-badge { color: var(--accent); font-size: 1.1rem; }
+        /* SLIDERS */
+        .control { margin-bottom: 18px; }
+        .label-row { display: flex; justify-content: space-between; font-weight: 700; }
+        .val-badge { color: var(--accent); }
 
         input[type="range"] { 
-            width: 100%; height: 8px; background: #ddd; border-radius: 5px; 
+            width: 100%; height: 10px; background: #ddd; border-radius: 5px; 
             -webkit-appearance: none; margin: 15px 0;
         }
         input[type="range"]::-webkit-slider-thumb { 
-            -webkit-appearance: none; width: 28px; height: 28px; 
-            background: white; border: 3px solid var(--accent); border-radius: 50%; cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            -webkit-appearance: none; width: 30px; height: 30px; 
+            background: white; border: 3px solid var(--accent); border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         /* BOTONES */
         button { 
             width: 100%; padding: 16px; border-radius: 12px; border: none; 
-            font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 0.1s, opacity 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;
+            font-weight: 700; font-size: 1rem; cursor: pointer; margin-bottom: 10px;
         }
-        button:active { transform: scale(0.98); }
-        
         #btn-toggle { background: var(--accent); color: white; }
         .btn-reset { background: #95a5a6; color: white; }
-        .btn-save { background: var(--success); color: white; margin-top: 10px; }
-        .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-save { background: var(--success); color: white; }
+        .btn-report { background: var(--primary); color: white; }
 
         /* DISPLAY RESULTADOS */
         #res-panel { 
-            padding: 30px; border-radius: 20px; color: white; text-align: center; 
-            transition: background 0.5s ease; margin-bottom: 20px;
+            padding: 25px; border-radius: 20px; color: white; text-align: center; 
+            margin-bottom: 15px; transition: background 0.3s;
         }
-        .rul-number { font-size: 4.5rem; font-weight: 900; display: block; line-height: 1; }
-        .status-label { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .rul-number { font-size: 4rem; font-weight: 900; display: block; line-height: 1; }
 
-        /* HISTORIAL */
-        .hist-list { max-height: 250px; overflow-y: auto; margin-top: 10px; }
-        .hist-item { 
-            padding: 12px; border-bottom: 1px solid #eee; display: flex; 
-            justify-content: space-between; align-items: center; font-size: 0.9rem;
-        }
-        .hist-info b { color: var(--primary); }
+        .hist-list { max-height: 200px; overflow-y: auto; font-size: 0.9rem; }
+        .hist-item { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
 
-        .disclaimer { 
-            font-size: 0.75rem; color: #95a5a6; text-align: justify; 
-            background: #fff; padding: 15px; border-radius: 10px; border-left: 4px solid var(--danger);
-        }
-
-        footer { text-align: center; padding: 30px 10px; color: #7f8c8d; font-size: 0.85rem; }
+        footer { text-align: center; padding: 25px; color: #7f8c8d; font-size: 0.8rem; }
     </style>
 </head>
 
 <body>
 
-<header>🦷 EndoFile Risk v2.0</header>
+<header>🦷 EndoFile Risk v2.1</header>
 
 <div class="container">
     
@@ -110,67 +92,63 @@
         <h3>Identificación Clínica</h3>
         <div class="input-group">
             <label>Especialista en Endodoncia:</label>
-            <input type="text" id="especialista" placeholder="Dr. Christian Nole" oninput="saveSettings()">
+            <input type="text" id="esp_nombre" oninput="saveSettings()">
         </div>
         <div class="input-group">
             <label>Sistema Rotatorio:</label>
-            <input type="text" id="sistema" placeholder="Ej: Rising Fanta-Dental" oninput="saveSettings()">
+            <input type="text" id="esp_sistema" oninput="saveSettings()">
         </div>
     </div>
 
     <div class="card">
-        <h3>Parámetros de Instrumentación</h3>
+        <h3>Parámetros</h3>
         
         <div class="control">
-            <div class="label-row">Diámetro ISO <span class="val-badge" id="d_v">0.10</span></div>
-            <input type="range" id="d" min="0.10" max="0.45" step="0.01" value="0.10" oninput="calculate()">
+            <div class="label-row">ISO <span class="val-badge" id="d_v">0.10</span></div>
+            <input type="range" id="d" min="0.10" max="0.45" step="0.01" value="0.10" oninput="calcular()">
         </div>
 
         <div class="control">
             <div class="label-row">Conicidad <span class="val-badge" id="c_v">0.02</span></div>
-            <input type="range" id="c" min="0.02" max="0.12" step="0.01" value="0.02" oninput="calculate()">
+            <input type="range" id="c" min="0.02" max="0.12" step="0.01" value="0.02" oninput="calcular()">
         </div>
 
         <div class="control">
             <div class="label-row">Curvatura <span class="val-badge" id="curv_v">Leve</span></div>
-            <input type="range" id="curv" min="1" max="3" value="1" oninput="calculate()">
+            <input type="range" id="curv" min="1" max="3" value="1" oninput="calcular()">
         </div>
 
         <div class="control">
-            <div class="label-row">Torque Máximo (Ncm) <span class="val-badge" id="trq_v">1.0</span></div>
-            <input type="range" id="trq" min="1" max="5.5" step="0.1" value="1.0" oninput="calculate()">
+            <div class="label-row">Torque (Ncm) <span class="val-badge" id="trq_v">1.0</span></div>
+            <input type="range" id="trq" min="1.0" max="5.5" step="0.1" value="1.0" oninput="calcular()">
         </div>
 
         <div class="control">
-            <div class="label-row">Tiempo de Uso (seg) <span class="val-badge" id="t_v">0</span></div>
+            <div class="label-row">Tiempo (seg) <span class="val-badge" id="t_v">0</span></div>
             <input type="range" id="t" min="0" max="180" value="0" oninput="manualTime()">
         </div>
 
         <button id="btn-toggle" onclick="toggleTimer()">▶ INICIAR CRONÓMETRO</button>
-        <button class="btn-reset" onclick="resetCalculator()">🔄 REINICIAR</button>
+        <button class="btn-reset" onclick="resetCalc()">🔄 REINICIAR TODO</button>
     </div>
 
-    <div id="res-panel">
-        <div class="status-label" id="status-txt">LISTO PARA EVALUAR</div>
+    <div id="res-panel" style="background: var(--success);">
+        <div id="st-txt" style="font-weight: 800; letter-spacing: 1px;">LISTO</div>
         <span class="rul-number" id="rul-val">10</span>
-        <div style="font-weight: 600;">USOS SEGUROS RESTANTES</div>
-        <div id="fatigue-val" style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Índice de Fatiga: 0.0%</div>
+        <div style="font-size: 0.9rem;">USOS RESTANTES</div>
+        <div id="fatiga-val" style="margin-top: 8px; font-size: 0.8rem; opacity: 0.9;">Índice de Fatiga: 0.0%</div>
     </div>
 
-    <button class="btn-save" onclick="saveRecord()">💾 GUARDAR REGISTRO</button>
+    <button class="btn-save" onclick="saveRecord()">💾 GUARDAR CICLO</button>
 
     <div class="card">
         <h3>Registro de Actividad</h3>
-        <div class="hist-list" id="hist-list"></div>
-        <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="btn-outline" onclick="generateAcademicReport()">📊 REPORTE</button>
-            <button class="btn-outline" onclick="exportCSV()">📥 EXPORTAR</button>
+        <div id="hist-list" class="hist-list"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+            <button class="btn-report" onclick="generateReport()">📊 REPORTE</button>
+            <button class="btn-report" onclick="exportCSV()">📥 CSV</button>
         </div>
-        <button style="background:none; color:var(--danger); font-size:0.7rem; margin-top:15px;" onclick="clearHistory()">BORRAR TODO EL HISTORIAL</button>
-    </div>
-
-    <div class="disclaimer">
-        <b>AVISO LEGAL:</b> Esta herramienta es un asistente basado en evidencia técnica (M-Wire). El profesional es el único responsable de la decisión clínica y del descarte de instrumentos.
+        <button style="background:none; color:var(--danger); font-size:0.7rem; margin-top:15px;" onclick="clearHist()">BORRAR HISTORIAL</button>
     </div>
 
     <footer>
@@ -180,185 +158,74 @@
 </div>
 
 <script>
-    let time = 0;
-    let isRunning = false;
+    let tiempo = 0;
+    let corriendo = false;
     let timerRef = null;
 
-    // Persistencia de Configuración
+    // Persistencia
     const saveSettings = () => {
-        localStorage.setItem('endo_dr', document.getElementById('especialista').value);
-        localStorage.setItem('endo_sys', document.getElementById('sistema').value);
+        localStorage.setItem('dr_name', document.getElementById('esp_nombre').value);
+        localStorage.setItem('sys_name', document.getElementById('esp_sistema').value);
     };
 
     const loadSettings = () => {
-        document.getElementById('especialista').value = localStorage.getItem('endo_dr') || "";
-        document.getElementById('sistema').value = localStorage.getItem('endo_sys') || "";
+        document.getElementById('esp_nombre').value = localStorage.getItem('dr_name') || "";
+        document.getElementById('esp_sistema').value = localStorage.getItem('sys_name') || "";
     };
 
-    // Lógica de Cálculo
-    const calculate = () => {
+    // Formato de Fecha
+    const fmtFecha = (f) => {
+        const d = new Date(f);
+        return d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear().toString().substr(-2) + " " + d.getHours() + ":" + ("0"+d.getMinutes()).slice(-2);
+    };
+
+    // EL ALMA: Función de Cálculo Corregida
+    const calcular = () => {
         const iso = parseFloat(document.getElementById('d').value);
-        const taper = parseFloat(document.getElementById('c').value);
+        const con = parseFloat(document.getElementById('c').value);
         const curv = parseInt(document.getElementById('curv').value);
         const trq = parseFloat(document.getElementById('trq').value);
-        
-        const fCurv = curv === 1 ? 1.0 : (curv === 2 ? 1.5 : 2.2);
-        const tCurv = curv === 1 ? "Leve" : (curv === 2 ? "Moderada" : "Severa");
 
+        // Actualizar etiquetas visuales
         document.getElementById('d_v').innerText = iso.toFixed(2);
-        document.getElementById('c_v').innerText = taper.toFixed(2);
-        document.getElementById('curv_v').innerText = tCurva;
+        document.getElementById('c_v').innerText = con.toFixed(2);
         document.getElementById('trq_v').innerText = trq.toFixed(1);
-        document.getElementById('t_v').innerText = time;
-        document.getElementById('t').value = time;
+        document.getElementById('t_v').innerText = tiempo;
+        document.getElementById('t').value = tiempo;
 
-        // Fórmula Pro
-        let fatigue = 100 * (0.45 * Math.pow(time/60, 1.3) + 0.30 * (trq/5) + 0.25 * (((iso-0.20)/0.20 + (taper-0.02)/0.08)/2));
-        fatigue = Math.min(Math.max(fatigue * fCurv, 0), 100);
+        let fCurva = 1.0;
+        let nCurva = "Leve";
+        if(curv == 2) { fCurva = 1.5; nCurva = "Moderada"; }
+        if(curv == 3) { fCurva = 2.2; nCurva = "Severa"; }
+        document.getElementById('curv_v').innerText = nCurva;
+
+        // Fórmulas
+        let score = 100 * (0.45 * Math.pow(tiempo/60, 1.3) + 0.30 * (trq/5) + 0.25 * (((iso-0.20)/0.20 + (con-0.02)/0.08)/2));
+        score = Math.min(Math.max(score * fCurva, 0), 100);
         
-        const rul = Math.max(Math.floor((100 - fatigue) / 10), 0);
+        const rul = Math.max(Math.floor((100 - score) / 10), 0);
         
-        // UI Feedback
+        // UI
         const panel = document.getElementById('res-panel');
-        const stLabel = document.getElementById('status-txt');
+        const stLabel = document.getElementById('st-txt');
         
         if(rul >= 7) { panel.style.backgroundColor = '#27ae60'; stLabel.innerText = "REUTILIZABLE"; }
         else if(rul >= 4) { panel.style.backgroundColor = '#f39c12'; stLabel.innerText = "PRECAUCIÓN"; }
-        else if(rul >= 1) { panel.style.backgroundColor = '#e67e22'; stLabel.innerText = "LÍMITE SEGURO"; }
+        else if(rul >= 1) { panel.style.backgroundColor = '#e67e22'; stLabel.innerText = "CRÍTICO"; }
         else { panel.style.backgroundColor = '#2c3e50'; stLabel.innerText = "DESCARTAR"; }
 
         document.getElementById('rul-val').innerText = rul;
-        document.getElementById('fatigue-val').innerText = `Índice de Fatiga: ${fatigue.toFixed(1)}%`;
+        document.getElementById('fatiga-val').innerText = `Índice de Fatiga: ${score.toFixed(1)}%`;
 
-        return { fatigue: fatigue.toFixed(1), rul, iso, taper };
+        return { score: score.toFixed(1), rul, iso, con };
     };
 
-    // Cronómetro
     const toggleTimer = () => {
         const btn = document.getElementById('btn-toggle');
-        if(!isRunning) {
-            isRunning = true;
+        if(!corriendo) {
+            corriendo = true;
             btn.innerText = "⏸ PAUSAR";
             btn.style.backgroundColor = "var(--danger)";
-            timerRef = setInterval(() => { time++; calculate(); }, 1000);
+            timerRef = setInterval(() => { tiempo++; calcular(); }, 1000);
         } else {
-            isRunning = false;
-            btn.innerText = "▶ REANUDAR";
-            btn.style.backgroundColor = "var(--accent)";
-            clearInterval(timerRef);
-        }
-    };
-
-    const manualTime = () => { time = parseInt(document.getElementById('t').value); calculate(); };
-
-    const resetCalculator = () => {
-        if(isRunning) toggleTimer();
-        time = 0;
-        document.getElementById('d').value = 0.10;
-        document.getElementById('c').value = 0.02;
-        document.getElementById('curv').value = 1;
-        document.getElementById('trq').value = 1.0;
-        calculate();
-    };
-
-    // Registro
-    const saveRecord = () => {
-        const res = calculate();
-        const history = JSON.parse(localStorage.getItem('endo_history') || "[]");
-        const entry = {
-            id: Date.now(),
-            date: new Date().toLocaleString('es-PE', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' }),
-            lima: `${res.iso}/${res.taper}`,
-            fatigue: res.fatigue,
-            rul: res.rul
-        };
-        history.push(entry);
-        localStorage.setItem('endo_history', JSON.stringify(history));
-        renderHistory();
-        alert("Ciclo registrado correctamente.");
-    };
-
-    const renderHistory = () => {
-        const history = JSON.parse(localStorage.getItem('endo_history') || "[]");
-        const list = document.getElementById('hist-list');
-        list.innerHTML = history.reverse().map(h => `
-            <div class="hist-item">
-                <div class="hist-info"><b>Lima ${h.lima}</b><br><small>${h.date}</small></div>
-                <div style="text-align:right"><b>RUL: ${h.rul}</b><br><small>${h.fatigue}%</small></div>
-            </div>
-        `).join('') || "<p style='text-align:center; color:#999;'>Sin registros previos.</p>";
-    };
-
-    // Reporte Académico (Tabla 3 líneas)
-    const generateAcademicReport = () => {
-        const history = JSON.parse(localStorage.getItem('endo_history') || "[]");
-        const dr = document.getElementById('especialista').value || "Sin Especificar";
-        const sys = document.getElementById('sistema').value || "Sin Especificar";
-        
-        if(!history.length) return alert("No hay datos para el reporte.");
-
-        const reportWindow = window.open('', '_blank');
-        reportWindow.document.write(`
-            <html><head><title>Reporte Académico</title><style>
-                body { font-family: 'Times New Roman', serif; padding: 50px; line-height: 1.5; }
-                h2 { text-align: center; margin-bottom: 5px; }
-                .meta { text-align: center; font-size: 1rem; margin-bottom: 40px; border-bottom: 1px double #000; padding-bottom: 10px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                th { border-top: 2pt solid black; border-bottom: 1pt solid black; padding: 12px; text-align: left; }
-                td { padding: 10px; border-bottom: none; font-size: 0.95rem; }
-                tr:last-child td { border-bottom: 2pt solid black; }
-                .footer { margin-top: 50px; font-size: 0.8rem; text-align: right; font-style: italic; }
-            </style></head><body>
-                <h2>REPORTE DE FATIGA CÍCLICA INSTRUMENTAL</h2>
-                <div class="meta">Especialista: Dr. ${dr} | Sistema Rotatorio: ${sys}</div>
-                <table>
-                    <thead>
-                        <tr><th>INSTRUMENTO</th><th>FATIGA %</th><th>USOS REST.</th><th>FECHA REGISTRO</th></tr>
-                    </thead>
-                    <tbody>
-                        ${history.map(h => `<tr><td>Lima ${h.lima}</td><td>${h.fatigue}%</td><td>${h.rul}</td><td>${h.date}</td></tr>`).join('')}
-                    </tbody>
-                </table>
-                <div class="footer">Generado por EndoFile Risk v2.0 | Desarrollado por Christian Nole (Lima - PERU)</div>
-            </body></html>
-        `);
-        reportWindow.document.close();
-    };
-
-    // Exportar CSV Profesional
-    const exportCSV = () => {
-        const history = JSON.parse(localStorage.getItem('endo_history') || "[]");
-        if(!history.length) return alert("No hay datos.");
-        
-        const dr = document.getElementById('especialista').value || "Dr_Nole";
-        let csvContent = "\uFEFFINSTRUMENTO,FATIGA_PORCENTAJE,USOS_RESTANTES,FECHA_HORA\n";
-        
-        history.forEach(h => {
-            csvContent += `Lima ${h.lima},${h.fatiga}%,${h.rul},${h.date}\n`;
-        });
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", `Reporte_EndoRisk_${dr.replace(/ /g, "_")}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const clearHistory = () => {
-        if(confirm("¿Estás seguro de eliminar todo el registro clínico?")) {
-            localStorage.setItem('endo_history', "[]");
-            renderHistory();
-        }
-    };
-
-    // Inicio
-    loadSettings();
-    calculate();
-    renderHistory();
-</script>
-
-</body>
-</html>
+            cor
