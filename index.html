@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EndoFile Risk v1.0</title>
+<link rel="manifest" href="manifest.json">
+
+<style>
+:root {
+    --primary: #2c3e50;
+    --accent: #3498db;
+    --bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --dark: #212121;
+}
+
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+    margin: 0; background: var(--bg); color: var(--text); line-height: 1.4;
+}
+
+header { 
+    background: var(--primary); color: white; padding: 15px; text-align: center; 
+    font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.container { padding: 12px; max-width: 440px; margin: auto; }
+
+.card-panel {
+    background: var(--card-bg); padding: 15px; border-radius: 14px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 15px;
+}
+
+h3 { margin-top: 0; font-size: 0.75rem; text-transform: uppercase; color: #7f8c8d; letter-spacing: 1px; }
+
+.control { margin-bottom: 15px; }
+label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;}
+.val-badge { background: #edf2f7; padding: 2px 8px; border-radius: 6px; color: var(--accent); }
+
+input[type="range"] { width: 100%; height: 6px; background: #dee2e6; border-radius: 5px; appearance: none; }
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none; width: 22px; height: 22px; background: var(--accent);
+    border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+button { border: none; padding: 14px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
+
+#btn-toggle { background: var(--accent); color: white; grid-column: span 2; font-size: 1rem; }
+.btn-secondary { background: #ecf0f1; color: var(--primary); }
+.btn-save { background: var(--success); color: white; width: 100%; margin-bottom: 20px; }
+
+#res { 
+    padding: 20px; border-radius: 18px; color: white; text-align: center; 
+    margin: 15px 0; transition: background 0.3s ease;
+}
+
+.rul-big { font-size: 3.2rem; font-weight: 800; display: block; margin: 4px 0; }
+.status-text { font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+
+.dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; }
+.dash-item { background: #f8f9fa; padding: 10px; border-radius: 8px; text-align: center; }
+
+.historial { max-height: 250px; overflow-y: auto; font-size: 0.75rem; border-top: 1px solid #eee; padding-top: 10px; }
+.hist-row { display: flex; flex-direction: column; padding: 10px 0; border-bottom: 1px solid #f1f1f1; }
+.hist-main { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 3px; gap: 5px; }
+.hist-sub { color: #7f8c8d; font-size: 0.65rem; display: flex; justify-content: space-between; }
+
+.btn-danger-outline { 
+    background: none; color: var(--danger); border: 1px solid var(--danger); 
+    font-size: 0.7rem; padding: 8px; margin-top: 10px; width: 100%;
+}
+
+.disclaimer {
+    background: #fff5f5; border: 1px solid #feb2b2; color: #c53030;
+    padding: 12px; border-radius: 10px; font-size: 0.65rem; margin-top: 20px; text-align: justify;
+}
+
+footer { text-align: center; font-size: 0.75rem; color: #95a5a6; padding: 30px 10px; line-height: 1.4; }
+</style>
+</head>
+
+<body>
+
+<header>🦷 EndoFile Risk v1.0</header>
+
+<div class="container">
+
+    <div class="card-panel">
+        <h3>Configuración de la Lima</h3>
+        
+        <div class="control">
+            <label>Diámetro ISO <span class="val-badge" id="d_val">0.10</span></label>
+            <input type="range" id="d" min="0.10" max="0.40" step="0.01" value="0.10">
+        </div>
+
+        <div class="control">
+            <label>Conicidad <span class="val-badge" id="c_val">0.02</span></label>
+            <input type="range" id="c" min="0.02" max="0.10" step="0.01" value="0.02">
+        </div>
+
+        <div class="control">
+            <label>Curvatura <span class="val-badge" id="curv_val">Leve</span></label>
+            <input type="range" id="curv" min="1" max="3" value="1">
+        </div>
+
+        <div class="control">
+            <label>Torque (Ncm) <span class="val-badge" id="torque_val">1.0</span></label>
+            <input type="range" id="torque" min="1" max="5" step="0.1" value="1.0">
+        </div>
+
+        <div class="control">
+            <label>Tiempo (seg) <span class="val-badge" id="t_val">0</span></label>
+            <input type="range" id="t" min="0" max="120" value="0">
+        </div>
+
+        <div class="btn-grid">
+            <button id="btn-toggle" onclick="toggleTimer()">▶ INICIAR CRONÓMETRO</button>
+            <button class="btn-secondary" style="grid-column: span 2;" onclick="reset()">🔄 REINICIAR TODO</button>
+        </div>
+    </div>
+
+    <div id="res">
+        <span class="status-text" id="status_label">LISTO</span>
+        <span class="rul-big" id="rul_val">10</span>
+        <span style="font-size: 0.9rem; opacity: 0.9;">USOS RESTANTES</span>
+        <div id="score_mini" style="margin-top:10px; font-size: 0.7rem; opacity: 0.8;">Índice de Fatiga: 0.0%</div>
+    </div>
+
+    <button class="btn-save" onclick="guardarCaso()">💾 GUARDAR CICLO ACTUAL</button>
+
+    <div class="card-panel">
+        <h3>Estadísticas Acumuladas</h3>
+        <div class="dashboard" id="dashboard"></div>
+    </div>
+
+    <div class="card-panel">
+        <h3>Registro de Actividad</h3>
+        <div class="historial" id="historial"></div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button style="background:none; color:var(--accent); flex: 1; font-size:0.7rem; text-decoration: underline;" onclick="exportarCSV()">DESCARGAR CSV</button>
+            <button class="btn-danger-outline" style="flex: 1;" onclick="borrarHistorial()">🗑️ BORRAR REGISTRO</button>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        <strong>AVISO LEGAL:</strong> Herramienta de apoyo clínico basada en el sistema RISING. El desarrollador no asume responsabilidad por el uso clínico o accidentes operatorios.
+    </div>
+
+    <footer>
+        © 2026 <b>Desarrollado por Christian Nole</b><br>
+        En base al sistema <b>RISING (Fanta-Dental)</b>
+    </footer>
+
+</div>
+
+<script>
+let db;
+const request = indexedDB.open("EndoDB",1);
+request.onupgradeneeded = e => {
+    db = e.target.result;
+    db.createObjectStore("casos",{keyPath:"id",autoIncrement:true});
+};
+request.onsuccess = e => { db = e.target.result; cargarHistorial(); };
+
+let tiempo=0, running=false, last=null;
+
+const d=document.getElementById("d"), c=document.getElementById("c"), 
+      curv=document.getElementById("curv"), t=document.getElementById("t"), 
+      torque=document.getElementById("torque"), btnToggle=document.getElementById("btn-toggle");
+
+function getCurv(v){
+    if(v==1) return {f:1,txt:"Leve"};
+    if(v==2) return {f:1.5,txt:"Moderada"};
+    return {f:2.2,txt:"Severa"};
+}
+
+function calc(){
+    let dv=parseFloat(d.value), cv=parseFloat(c.value), tv=parseFloat(torque.value);
+    let cur=getCurv(parseInt(curv.value));
+
+    document.getElementById("d_val").textContent=dv.toFixed(2);
+    document.getElementById("c_val").textContent=cv.toFixed(2);
+    document.getElementById("torque_val").textContent=tv.toFixed(1);
+    document.getElementById("t_val").textContent=tiempo;
+    document.getElementById("curv_val").textContent=cur.txt;
+    
+    t.value = tiempo;
+
+    let T=Math.pow(tiempo/60, 1.3);
+    let Tor=tv/5;
+    let G=((dv-0.20)/0.20+(cv-0.02)/0.08)/2;
+    
+    let score=100*(0.45*T+0.30*Tor+0.25*G);
+    score*=cur.f;
+    score=Math.min(score,100);
+
+    let rul=Math.floor((100-score)/10);
+    let estado="REUTILIZABLE", color="var(--success)";
+    
+    if(rul<6) { estado="PRECAUCIÓN"; color="var(--warning)"; }
+    if(rul<3) { estado="ÚLTIMO USO"; color="#e67e22"; }
+    if(rul<1) { estado="DESCARTAR"; color="var(--dark)"; rul=0; }
+
+    const resDiv = document.getElementById("res");
+    resDiv.style.background=color;
+    document.getElementById("rul_val").textContent = rul;
+    document.getElementById("status_label").textContent = estado;
+    document.getElementById("score_mini").textContent = `Índice de Fatiga: ${score.toFixed(1)}%`;
+
+    return {score,rul,estado};
+}
+
+function loop(ts){
+    if(!running) return;
+    if(!last) last=ts;
+    if(ts - last >= 1000){
+        tiempo++;
+        calc();
+        last = ts;
+    }
+    requestAnimationFrame(loop);
+}
+
+function toggleTimer(){
+    if(!running){
+        running=true;
+        btnToggle.textContent="⏸ PAUSAR CRONÓMETRO";
+        btnToggle.style.background="var(--danger)";
+        last = performance.now();
+        requestAnimationFrame(loop);
+    } else {
+        running=false;
+        btnToggle.textContent="▶ REANUDAR CRONÓMETRO";
+        btnToggle.style.background="var(--accent)";
+        last=null;
+    }
+}
+
+function reset(){
+    running=false; tiempo=0; last=null;
+    d.value=0.10; c.value=0.02; curv.value=1; t.value=0; torque.value=1.0;
+    btnToggle.textContent="▶ INICIAR CRONÓMETRO";
+    btnToggle.style.background="var(--accent)";
+    calc();
+}
+
+function guardarCaso(){
+    const data=calc();
+    const tx=db.transaction("casos","readwrite");
+    const store=tx.objectStore("casos");
+    store.add({
+        fecha:new Date().toLocaleString('es-PE'),
+        tiempo, diametro:d.value, conicidad:c.value, 
+        curvatura:curv.value, torque:torque.value,
+        score:data.score, rul:data.rul, estado:data.estado
+    });
+    tx.oncomplete=()=>cargarHistorial();
+}
+
+function cargarHistorial(){
+    const tx=db.transaction("casos","readonly");
+    const store=tx.objectStore("casos");
+    const req=store.getAll();
+    req.onsuccess=()=>{
+        let data=req.result;
+        
+        // El registro ahora muestra tipo de lima, usos y fatiga individual
+        document.getElementById("historial").innerHTML = data.length 
+            ? data.map(c=>`
+                <div class="hist-row">
+                    <div class="hist-main">
+                        <span style="flex:1.5">Lima: ${c.diametro}/${c.conicidad}</span>
+                        <span style="flex:1">Usos: ${c.rul}</span>
+                        <span style="flex:1">Fatiga: ${c.score.toFixed(1)}%</span>
+                    </div>
+                    <div class="hist-sub">
+                        <span>${c.fecha}</span>
+                        <span>${c.estado}</span>
+                    </div>
+                </div>`).reverse().join("")
+            : "<p style='text-align:center; color:#999;'>Sin registros</p>";
+
+        let total=data.length;
+        let promedio = total? (data.reduce((a,b)=>a+b.score,0)/total).toFixed(1):0;
+        document.getElementById("dashboard").innerHTML=`
+            <div class="dash-item"><strong>${total}</strong><br>Ciclos</div>
+            <div class="dash-item"><strong>${promedio}%</strong><br>Fatiga Prom.</div>
+        `;
+    };
+}
+
+function borrarHistorial() {
+    if (confirm("¿Estás seguro de que deseas borrar todo el registro?")) {
+        const tx = db.transaction("casos", "readwrite");
+        const store = tx.objectStore("casos");
+        store.clear();
+        tx.oncomplete = () => cargarHistorial();
+    }
+}
+
+// Corrección del CSV: Solo tipo de lima, usos restantes y fatiga promedio
+function exportarCSV(){
+    const tx=db.transaction("casos","readonly");
+    const store=tx.objectStore("casos");
+    const req=store.getAll();
+    req.onsuccess=()=>{
+        let data=req.result;
+        let csv="\uFEFFtipo_lima,usos_restantes,fatiga_promedio\n";
+        
+        data.forEach(c=>{
+            let tipo = `${c.diametro}/${c.conicidad}`;
+            csv+=`${tipo},${c.rul},${c.score.toFixed(1)}%\n`;
+        });
+
+        let blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+        let url=URL.createObjectURL(blob);
+        let a=document.createElement("a");
+        a.href=url;
+        a.download="EndoFileRisk_Data.csv";
+        a.click();
+    };
+}
+
+[d,c,curv,torque].forEach(el=>el.oninput=calc);
+t.oninput=()=>{tiempo=parseInt(t.value); calc();};
+
+reset();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+
+</body>
+</html>

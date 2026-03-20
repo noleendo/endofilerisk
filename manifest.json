@@ -1,0 +1,8 @@
+{
+  "name": "EndoFile Risk v1.0",
+  "short_name": "EndoFile",
+  "display": "minimal-ui",
+  "start_url": "index.html",
+  "background_color": "#ffffff",
+  "theme_color": "#2c3e50"
+}
