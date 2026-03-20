@@ -34,7 +34,7 @@ La aplicación está diseñada como una **PWA (Progressive Web App)** para una e
 4. **Tip Clínico:** Abre la app y usa la función **Split View** de iPadOS para colocar *EndoFile Risk* al lado de tu software de motor endodóntico.
 
 ### En Mac M1:
-1. Abre el link en Chrome o Edge.
+1. Abre el link en Safari, Chrome o Edge.
 2. Haz clic en el icono de **Instalar** en la barra de direcciones.
 3. Ancla la app al Dock para acceso inmediato.
 
