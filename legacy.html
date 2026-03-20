@@ -4,45 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<title>EndoFile Risk LEGACY v1.5</title>
+<title>EndoFile Risk LEGACY v1.6</title>
 
 <style>
-/* CSS OPTIMIZADO PARA iPAD MINI 1 (iOS 9) */
+/* CSS PARA iPAD MINI 1 */
 body { font-family: Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f4; color: #333; }
-header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.2rem; }
+header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; }
 .container { padding: 10px; max-width: 420px; margin: auto; }
-.card { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-h3 { margin: 0 0 10px 0; font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
+.card { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 12px; }
 
-/* CONTROLES TÁCTILES GRANDES */
+/* CONTROLES TÁCTILES */
 input[type="range"] { width: 100%; height: 45px; margin: 10px 0; -webkit-appearance: none; background: #dfe6e9; border-radius: 10px; }
 input[type="range"]::-webkit-slider-thumb { 
-    -webkit-appearance: none; width: 38px; height: 38px; background: #3498db; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    -webkit-appearance: none; width: 38px; height: 38px; background: #3498db; border-radius: 50%; border: 2px solid #fff; 
 }
 
-label { display: block; font-weight: bold; font-size: 1.1rem; margin-top: 5px; }
-.val { float: right; color: #3498db; font-size: 1.2rem; }
+label { display: block; font-weight: bold; font-size: 1rem; }
+.val { float: right; color: #3498db; }
 
-/* BOTONES */
-button { display: block; width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; margin-bottom: 12px; cursor: pointer; }
+button { display: block; width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; cursor: pointer; }
 #btn-toggle { background: #3498db; color: white; }
 .btn-reset { background: #95a5a6; color: white; }
 .btn-save { background: #27ae60; color: white; }
-.btn-csv { background: #34495e; color: white; margin-top: 10px; }
+.btn-report { background: #34495e; color: white; border: 2px solid #2c3e50; }
 
-/* RESULTADOS */
 #res { padding: 25px; border-radius: 15px; color: white; text-align: center; background: #27ae60; margin-bottom: 15px; }
-.big { font-size: 4rem; font-weight: bold; display: block; line-height: 1; margin: 5px 0; }
-.status { font-weight: bold; text-transform: uppercase; font-size: 1rem; letter-spacing: 1px; }
+.big { font-size: 3.5rem; font-weight: bold; display: block; }
 
-/* HISTORIAL */
-.hist { font-size: 0.9rem; border-top: 1px solid #eee; margin-top: 10px; max-height: 250px; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
-.hist-item { padding: 12px 0; border-bottom: 1px solid #eee; line-height: 1.4; }
+.hist { font-size: 0.85rem; border-top: 1px solid #eee; margin-top: 10px; max-height: 200px; overflow-y: scroll; }
+.hist-item { padding: 10px 0; border-bottom: 1px solid #eee; }
 
-/* LEGAL Y FOOTER */
-.disclaimer { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 12px; border-radius: 8px; font-size: 0.75rem; margin-top: 20px; text-align: justify; }
-footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 30px 10px; line-height: 1.5; }
+.disclaimer { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 10px; border-radius: 8px; font-size: 0.7rem; margin-top: 15px; text-align: justify; }
+footer { text-align: center; font-size: 0.75rem; color: #95a5a6; padding: 25px 10px; line-height: 1.4; }
 </style>
 </head>
 
@@ -53,8 +46,7 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 30px 10
 <div class="container">
     <div class="card">
         <h3>Configuración de Lima</h3>
-        
-        <label>Diámetro ISO: <span class="val" id="d_v">0.10</span></label>
+        <label>ISO: <span class="val" id="d_v">0.10</span></label>
         <input type="range" id="d" min="0.10" max="0.40" step="0.01" value="0.10" onchange="calc()" oninput="calc()">
 
         <label>Conicidad: <span class="val" id="c_v">0.02</span></label>
@@ -63,7 +55,7 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 30px 10
         <label>Curvatura: <span class="val" id="curv_v">Leve</span></label>
         <input type="range" id="curv" min="1" max="3" value="1" onchange="calc()" oninput="calc()">
 
-        <label>Torque (Ncm): <span class="val" id="torque_v">1.0</span></label>
+        <label>Torque: <span class="val" id="torque_v">1.0</span></label>
         <input type="range" id="torque" min="1" max="5" step="0.1" value="1.0" onchange="calc()" oninput="calc()">
 
         <label>Tiempo (seg): <span class="val" id="t_v">0</span></label>
@@ -74,10 +66,10 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 30px 10
     </div>
 
     <div id="res">
-        <span class="status" id="st">LISTO</span>
+        <span id="st" style="font-weight:bold; text-transform:uppercase;">LISTO</span>
         <span class="big" id="rul">10</span>
-        <span style="font-weight: bold;">USOS RESTANTES</span>
-        <div id="fatiga" style="font-size: 0.9rem; margin-top:10px; opacity: 0.9;">Índice de Fatiga: 0.0%</div>
+        <span>USOS RESTANTES</span>
+        <div id="fatiga" style="font-size: 0.8rem; margin-top:10px;">Fatiga: 0.0%</div>
     </div>
 
     <button class="btn-save" onclick="guardarRegistro()">💾 GUARDAR REGISTRO</button>
@@ -85,170 +77,132 @@ footer { text-align: center; font-size: 0.8rem; color: #95a5a6; padding: 30px 10
     <div class="card">
         <h3>Registro de Actividad</h3>
         <div id="lista" class="hist"></div>
-        
-        <div style="margin-top:15px;">
-            <button class="btn-csv" onclick="exportarCSV()">📥 VER REGISTRO (PARA COPIAR)</button>
-            <button style="background:none; color:#e74c3c; font-size:0.75rem; width:100%; margin-top:15px; border:1px solid #e74c3c; padding:8px; border-radius:5px;" onclick="borrarTodo()">🗑️ BORRAR TODO EL HISTORIAL</button>
-        </div>
+        <button class="btn-report" onclick="generarReporte()">📊 GENERAR REPORTE ACADÉMICO</button>
+        <button style="background:none; color:red; font-size:0.7rem; width:100%; margin-top:10px;" onclick="borrarTodo()">BORRAR TODO EL HISTORIAL</button>
     </div>
 
     <div class="disclaimer">
-        <strong>AVISO LEGAL:</strong> Herramienta de apoyo clínico basada en el sistema RISING. El desarrollador no asume responsabilidad por el uso clínico, accidentes operatorios o fracturas de instrumentos derivados del uso de este software.
+        <strong>AVISO LEGAL:</strong> Herramienta de apoyo clínico basada en el sistema RISING. El desarrollador no asume responsabilidad por accidentes operatorios derivados del uso de este software.
     </div>
 
     <footer>
         © 2026 Desarrollado por <b>Christian Nole</b><br>
-        En base a data de lima <b>RISING (Fanta-Dental)</b><br>
-        Optimizado para iPad mini 1 (M-Wire RISING)
+        Data de lima <b>RISING (Fanta-Dental)</b>
     </footer>
 </div>
 
 <script>
-/* JAVASCRIPT ES5 - COMPATIBILIDAD TOTAL CON iOS 9 */
 var tiempo = 0;
 var corriendo = false;
 var timerRef = null;
+
+// FORMATEADOR DE FECHA CORTA (DD/MM/AA HH:MM)
+function formatFecha(f) {
+    var d = new Date(f);
+    var dia = ("0" + d.getDate()).slice(-2);
+    var mes = ("0" + (d.getMonth() + 1)).slice(-2);
+    var ano = d.getFullYear().toString().substr(-2);
+    var hora = ("0" + d.getHours()).slice(-2);
+    var min = ("0" + d.getMinutes()).slice(-2);
+    return dia + "/" + mes + "/" + ano + " " + hora + ":" + min;
+}
 
 function calc() {
     var ISO = parseFloat(document.getElementById("d").value);
     var CON = parseFloat(document.getElementById("c").value);
     var CRV = parseInt(document.getElementById("curv").value);
     var TRQ = parseFloat(document.getElementById("torque").value);
+    var fCurva = (CRV == 1) ? 1.0 : (CRV == 2 ? 1.5 : 2.2);
     
-    var fCurva = 1.0;
-    var tCurva = "Leve";
-    if(CRV == 2) { fCurva = 1.5; tCurva = "Moderada"; }
-    if(CRV == 3) { fCurva = 2.2; tCurva = "Severa"; }
-
-    // Actualizar etiquetas
     document.getElementById("d_v").innerHTML = ISO.toFixed(2);
     document.getElementById("c_v").innerHTML = CON.toFixed(2);
     document.getElementById("torque_v").innerHTML = TRQ.toFixed(1);
     document.getElementById("t_v").innerHTML = tiempo;
-    document.getElementById("curv_v").innerHTML = tCurva;
-    document.getElementById("t").value = tiempo;
+    document.getElementById("curv_v").innerHTML = (CRV==1?"Leve":(CRV==2?"Moderada":"Severa"));
 
-    // Fórmulas de fatiga
-    var fTiempo = Math.pow(tiempo / 60, 1.3);
-    var fTorque = TRQ / 5;
-    var fGeom = ((ISO - 0.20) / 0.20 + (CON - 0.02) / 0.08) / 2;
-    
-    var score = 100 * (0.45 * fTiempo + 0.30 * fTorque + 0.25 * fGeom);
-    score = score * fCurva;
-    
-    if (score > 100) score = 100;
-    if (score < 0) score = 0;
-
+    var score = 100 * (0.45 * Math.pow(tiempo/60, 1.3) + 0.30 * (TRQ/5) + 0.25 * (((ISO-0.20)/0.20 + (CON-0.02)/0.08)/2));
+    score = Math.min(Math.max(score * fCurva, 0), 100);
     var rul = Math.floor((100 - score) / 10);
-    var color = "#27ae60";
-    var estado = "REUTILIZABLE";
-    
-    if(rul < 6) { color = "#f39c12"; estado = "PRECAUCIÓN"; }
-    if(rul < 3) { color = "#d35400"; estado = "CRÍTICO"; }
-    if(rul < 1) { color = "#2c3e50"; estado = "DESCARTAR"; rul = 0; }
 
-    // Actualizar UI
-    var resDiv = document.getElementById("res");
-    resDiv.style.backgroundColor = color;
+    document.getElementById("res").style.backgroundColor = (rul<6?(rul<3?(rul<1?"#2c3e50":"#e67e22"):"#f39c12"):"#27ae60");
     document.getElementById("rul").innerHTML = rul;
-    document.getElementById("st").innerHTML = estado;
+    document.getElementById("st").innerHTML = (rul<6?(rul<3?(rul<1?"DESCARTAR":"CRÍTICO"):"PRECAUCIÓN"):"REUTILIZABLE");
     document.getElementById("fatiga").innerHTML = "Índice de Fatiga: " + score.toFixed(1) + "%";
     
-    return { s: score.toFixed(1), r: rul, e: estado, iso: ISO, con: CON };
+    return { s: score.toFixed(1), r: (rul<0?0:rul), iso: ISO, con: CON };
 }
 
 function toggleTimer() {
     var btn = document.getElementById("btn-toggle");
     if(!corriendo) {
-        corriendo = true;
-        btn.innerHTML = "⏸ PAUSAR";
-        btn.style.backgroundColor = "#e74c3c";
-        timerRef = setInterval(function() {
-            tiempo++;
-            calc();
-        }, 1000);
+        corriendo = true; btn.innerHTML = "⏸ PAUSAR"; btn.style.backgroundColor = "#e74c3c";
+        timerRef = setInterval(function(){ tiempo++; calc(); }, 1000);
     } else {
-        corriendo = false;
-        btn.innerHTML = "▶ REANUDAR";
-        btn.style.backgroundColor = "#3498db";
+        corriendo = false; btn.innerHTML = "▶ REANUDAR"; btn.style.backgroundColor = "#3498db";
         clearInterval(timerRef);
     }
 }
 
-function manualTime() {
-    tiempo = parseInt(document.getElementById("t").value);
-    calc();
-}
-
-function resetTodo() {
-    if(corriendo) toggleTimer();
-    tiempo = 0;
-    document.getElementById("d").value = 0.10;
-    document.getElementById("c").value = 0.02;
-    document.getElementById("curv").value = 1;
-    document.getElementById("torque").value = 1.0;
-    document.getElementById("t").value = 0;
-    calc();
-}
+function resetTodo() { if(corriendo) toggleTimer(); tiempo = 0; calc(); }
 
 function guardarRegistro() {
-    var datos = calc();
-    var historial = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
-    
-    var nuevoRegistro = {
-        fecha: new Date().toLocaleString(),
-        lima: datos.iso + "/" + datos.con,
-        fatiga: datos.s,
-        usos: datos.r
-    };
-    
-    historial.push(nuevoRegistro);
-    localStorage.setItem("endoHistorial", JSON.stringify(historial));
+    var d = calc();
+    var h = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
+    h.push({ f: new Date(), l: d.iso+"/"+d.con, s: d.s, r: d.r });
+    localStorage.setItem("endoHistorial", JSON.stringify(h));
     mostrarHistorial();
-    alert("¡Registro guardado!");
 }
 
 function mostrarHistorial() {
-    var historial = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
+    var h = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
     var html = "";
-    for (var i = historial.length - 1; i >= 0; i--) {
-        var h = historial[i];
-        html += "<div class='hist-item'><strong>Lima " + h.lima + "</strong><br>" +
-                "<small>Usos restantes: " + h.usos + " | Fatiga: " + h.fatiga + "%<br>" + h.fecha + "</small></div>";
+    for (var i = h.length - 1; i >= 0; i--) {
+        html += "<div class='hist-item'><strong>Lima " + h[i].l + "</strong> | Restan: " + h[i].r + " | <small>" + formatFecha(h[i].f) + "</small></div>";
     }
-    document.getElementById("lista").innerHTML = html || "No hay registros guardados.";
+    document.getElementById("lista").innerHTML = html || "Sin registros.";
 }
 
-function borrarTodo() {
-    if(confirm("¿Seguro que deseas borrar TODO el historial?")) {
-        localStorage.removeItem("endoHistorial");
-        mostrarHistorial();
+function borrarTodo() { if(confirm("¿Borrar historial?")) { localStorage.removeItem("endoHistorial"); mostrarHistorial(); } }
+
+// FUNCIÓN CREATIVA: REPORTE CON FORMATO DE TABLA ACADÉMICA (3 LÍNEAS)
+function generarReporte() {
+    var h = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
+    if(h.length === 0) { alert("No hay datos."); return; }
+
+    var htmlReporte = "<html><head><title>Reporte EndoRisk</title><style>" +
+        "body { font-family: 'Times New Roman', serif; padding: 40px; color: #000; }" +
+        "h2 { text-align: center; margin-bottom: 5px; }" +
+        "p { text-align: center; font-size: 0.9rem; margin-bottom: 30px; }" +
+        "table { width: 100%; border-collapse: collapse; margin: auto; }" +
+        "th { border-top: 2px solid black; border-bottom: 1px solid black; padding: 10px; text-align: left; }" +
+        "td { padding: 8px; font-size: 0.9rem; }" +
+        ".last-row td { border-bottom: 2px solid black; padding-bottom: 10px; }" +
+        "</style></head><body>" +
+        "<h2>REPORTE CLÍNICO DE FATIGA INSTRUMENTAL</h2>" +
+        "<p>Investigador: Dr. Christian Nole | Sistema: RISING (Fanta-Dental)</p>" +
+        "<table><thead><tr><th>LIMA (ISO/T)</th><th>FATIGA %</th><th>USOS REST.</th><th>FECHA Y HORA</th></tr></thead><tbody>";
+
+    for (var i = 0; i < h.length; i++) {
+        var clase = (i === h.length - 1) ? "class='last-row'" : "";
+        htmlReporte += "<tr " + clase + ">" +
+            "<td>" + h[i].l + "</td>" +
+            "<td>" + h[i].s + "%</td>" +
+            "<td>" + h[i].r + "</td>" +
+            "<td>" + formatFecha(h[i].f) + "</td></tr>";
     }
+
+    htmlReporte += "</tbody></table>" +
+        "<div style='margin-top:40px; font-size:0.8rem; text-align:right;'>Generado automáticamente por EndoFile Risk Legacy v1.6</div>" +
+        "</body></html>";
+
+    var uri = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlReporte);
+    window.location.href = uri;
 }
 
-function exportarCSV() {
-    var historial = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
-    if(historial.length === 0) {
-        alert("No hay datos para exportar.");
-        return;
-    }
-    
-    var csv = "tipo_lima,usos_restantes,fatiga_porcentaje,fecha\n";
-    for (var i = 0; i < historial.length; i++) {
-        var h = historial[i];
-        csv += h.lima + "," + h.usos + "," + h.fatiga + "%," + h.fecha + "\n";
-    }
-    
-    // Mostramos la data en una ventana para que el usuario la copie
-    // Esto es lo más seguro para iPad mini 1
-    var dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(csv);
-    window.location.href = dataUri;
-}
+function manualTime() { tiempo = parseInt(document.getElementById("t").value); calc(); }
 
-// Inicialización
 calc();
 mostrarHistorial();
 </script>
-
 </body>
 </html>
