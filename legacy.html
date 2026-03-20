@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>EndoFile Risk LEGACY v1.3</title>
+<title>EndoFile Risk LEGACY v1.4</title>
 
 <style>
 body { font-family: Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f4; color: #333; }
@@ -13,7 +13,6 @@ header { background: #2c3e50; color: white; padding: 15px; text-align: center; f
 .card { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 10px; }
 h3 { margin: 0 0 10px 0; font-size: 0.8rem; color: #666; text-transform: uppercase; }
 
-/* SLIDERS GRANDES */
 input[type="range"] { width: 100%; height: 40px; margin: 10px 0; -webkit-appearance: none; background: #ddd; border-radius: 10px; }
 input[type="range"]::-webkit-slider-thumb { 
     -webkit-appearance: none; width: 35px; height: 35px; background: #3498db; border-radius: 50%; border: 2px solid #fff; 
@@ -22,26 +21,24 @@ input[type="range"]::-webkit-slider-thumb {
 label { display: block; font-weight: bold; font-size: 1rem; }
 .val { float: right; color: #3498db; }
 
-button { display: block; width: 100%; padding: 18px; border-radius: 10px; border: none; font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; }
+button { display: block; width: 100%; padding: 18px; border-radius: 10px; border: none; font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; cursor: pointer; }
 #btn-toggle { background: #3498db; color: white; }
 .btn-reset { background: #95a5a6; color: white; }
 .btn-save { background: #27ae60; color: white; }
+.btn-csv { background: #f8f9fa; color: #2c3e50; border: 1px solid #ccc; font-size: 0.8rem; padding: 10px; }
 
 #res { padding: 25px; border-radius: 15px; color: white; text-align: center; background: #27ae60; margin-bottom: 15px; }
 .big { font-size: 3.5rem; font-weight: bold; display: block; }
 .status { font-weight: bold; text-transform: uppercase; }
 
 .hist { font-size: 0.85rem; border-top: 1px solid #eee; margin-top: 10px; max-height: 200px; overflow-y: scroll; }
-.hist-item { padding: 8px 0; border-bottom: 1px solid #eee; }
+.hist-item { padding: 10px 0; border-bottom: 1px solid #eee; line-height: 1.3; }
 
-/* DISEÑO DEL DISCLAIMER Y FOOTER */
 .disclaimer {
     background: #fff5f5; border: 1px solid #feb2b2; color: #c53030;
     padding: 12px; border-radius: 8px; font-size: 0.7rem; margin-top: 20px; text-align: justify;
 }
-footer { 
-    text-align: center; font-size: 0.75rem; color: #95a5a6; padding: 25px 10px; line-height: 1.4; 
-}
+footer { text-align: center; font-size: 0.75rem; color: #95a5a6; padding: 25px 10px; line-height: 1.4; }
 </style>
 </head>
 
@@ -84,7 +81,11 @@ footer {
     <div class="card">
         <h3>Registro de Actividad</h3>
         <div id="lista" class="hist"></div>
-        <button style="background:none; color:red; font-size:0.7rem; margin-top:15px;" onclick="borrarTodo()">BORRAR TODO EL HISTORIAL</button>
+        
+        <div style="margin-top:15px;">
+            <button class="btn-csv" onclick="exportarCSV()">📥 DESCARGAR REGISTRO (CSV)</button>
+            <button style="background:none; color:red; font-size:0.7rem; width:100%; margin-top:10px;" onclick="borrarTodo()">BORRAR TODO EL HISTORIAL</button>
+        </div>
     </div>
 
     <div class="disclaimer">
@@ -99,7 +100,6 @@ footer {
 </div>
 
 <script>
-// Lógica de cálculo y guardado
 var tiempo = 0;
 var corriendo = false;
 var timerRef = null;
@@ -200,7 +200,8 @@ function mostrarHistorial() {
     var html = "";
     for (var i = historial.length - 1; i >= 0; i--) {
         var h = historial[i];
-        html += "<div class='hist-item'><strong>" + h.lima + "</strong> | Fatiga: " + h.fatiga + "% | " + h.fecha + "</div>";
+        html += "<div class='hist-item'><strong>Lima " + h.lima + "</strong><br>" +
+                "<small>Usos restantes: " + h.usos + " | Fatiga: " + h.fatiga + "%<br>" + h.fecha + "</small></div>";
     }
     document.getElementById("lista").innerHTML = html || "No hay registros.";
 }
@@ -209,6 +210,35 @@ function borrarTodo() {
     if(confirm("¿Borrar todo el historial?")) {
         localStorage.removeItem("endoHistorial");
         mostrarHistorial();
+    }
+}
+
+// FUNCIÓN PARA EXPORTAR CSV (COMPATIBLE CON iPAD MINI 1)
+function exportarCSV() {
+    var historial = JSON.parse(localStorage.getItem("endoHistorial") || "[]");
+    if(historial.length === 0) {
+        alert("No hay datos para exportar.");
+        return;
+    }
+    
+    var csv = "\uFEFFtipo_lima,usos_restantes,fatiga_porcentaje,fecha\n";
+    for (var i = 0; i < historial.length; i++) {
+        var h = historial[i];
+        csv += h.lima + "," + h.usos + "," + h.fatiga + "%," + h.fecha + "\n";
+    }
+    
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    if(window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, "Registro_EndoRisk.csv");
+    } else {
+        var a = document.createElement("a");
+        var url = URL.createObjectURL(blob);
+        a.href = url;
+        a.download = "Registro_EndoRisk.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 }
 
