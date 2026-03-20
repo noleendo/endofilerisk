@@ -4,231 +4,202 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<title>EndoFile Risk LEGACY</title>
+<title>EndoRisk LEGACY v1.1</title>
 
 <style>
-body { font-family: Helvetica, Arial, sans-serif; margin: 0; background: #f8f9fa; color: #2c3e50; }
+/* Estilos simplificados para iPad mini 1 */
+body { font-family: Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f4; color: #333; }
 header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; }
-.container { padding: 10px; max-width: 400px; margin: auto; }
-.card-panel { background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; }
-h3 { margin: 0 0 10px 0; font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; }
-.control { margin-bottom: 15px; }
-label { display: block; font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; }
-.val-badge { float: right; color: #3498db; font-weight: bold; }
-input[type="range"] { width: 100%; margin: 10px 0; }
-button { display: block; width: 100%; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 1rem; margin-bottom: 10px; cursor: pointer; }
+.container { padding: 10px; max-width: 420px; margin: auto; }
+.card { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 10px; }
+h3 { margin: 0 0 10px 0; font-size: 0.8rem; color: #666; text-transform: uppercase; }
+
+/* SLIDERS GRANDES PARA DEDOS */
+input[type="range"] { width: 100%; height: 40px; margin: 10px 0; -webkit-appearance: none; background: #ddd; border-radius: 10px; }
+input[type="range"]::-webkit-slider-thumb { 
+    -webkit-appearance: none; 
+    width: 35px; height: 35px; /* Tamaño grande para iPad mini 1 */
+    background: #3498db; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+label { display: block; font-weight: bold; font-size: 1rem; }
+.val { float: right; color: #3498db; }
+
+button { display: block; width: 100%; padding: 18px; border-radius: 10px; border: none; font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; }
 #btn-toggle { background: #3498db; color: white; }
-.btn-secondary { background: #ecf0f1; color: #2c3e50; }
-.btn-save { background: #27ae60; color: white; margin-top: 10px; }
-#res { padding: 20px; border-radius: 15px; color: white; text-align: center; margin-bottom: 15px; background: #27ae60; }
-.rul-big { font-size: 3.5rem; font-weight: bold; display: block; }
-.status-text { font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-.dashboard { overflow: hidden; margin-top: 10px; }
-.dash-item { float: left; width: 44%; background: #f1f1f1; padding: 10px; border-radius: 8px; text-align: center; margin: 2%; font-size: 0.8rem; }
-.historial { max-height: 200px; overflow-y: auto; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: 10px; }
-.hist-row { padding: 10px 0; border-bottom: 1px solid #eee; }
-footer { text-align: center; font-size: 0.7rem; color: #95a5a6; padding: 20px; }
+.btn-save { background: #27ae60; color: white; }
+
+#res { padding: 25px; border-radius: 15px; color: white; text-align: center; background: #27ae60; margin-bottom: 15px; }
+.big { font-size: 3.5rem; font-weight: bold; display: block; }
+.status { font-weight: bold; text-transform: uppercase; }
+.hist { font-size: 0.8rem; border-top: 1px solid #eee; margin-top: 10px; max-height: 150px; overflow-y: scroll; }
 </style>
 </head>
 
 <body>
-<header>🦷 EndoFile Risk v1.0 Legacy</header>
+
+<header>🦷 EndoFile Risk LEGACY</header>
+
 <div class="container">
-    <div class="card-panel">
-        <h3>Ajustes de Lima</h3>
-        <div class="control">
-            <label>Diámetro ISO: <span class="val-badge" id="d_val">0.10</span></label>
-            <input type="range" id="d" min="0.10" max="0.40" step="0.01" value="0.10">
-        </div>
-        <div class="control">
-            <label>Conicidad: <span class="val-badge" id="c_val">0.02</span></label>
-            <input type="range" id="c" min="0.02" max="0.10" step="0.01" value="0.02">
-        </div>
-        <div class="control">
-            <label>Curvatura: <span class="val-badge" id="curv_val">Leve</span></label>
-            <input type="range" id="curv" min="1" max="3" value="1">
-        </div>
-        <div class="control">
-            <label>Torque (Ncm): <span class="val-badge" id="torque_val">1.0</span></label>
-            <input type="range" id="torque" min="1" max="5" step="0.1" value="1.0">
-        </div>
-        <div class="control">
-            <label>Tiempo (seg): <span class="val-badge" id="t_val">0</span></label>
-            <input type="range" id="t" min="0" max="120" value="0">
-        </div>
-        <button id="btn-toggle">▶ INICIAR CRONÓMETRO</button>
-        <button class="btn-secondary" id="btn-reset">🔄 REINICIAR</button>
+    <div class="card">
+        <h3>Configuración de Lima</h3>
+        
+        <label>ISO: <span class="val" id="d_v">0.10</span></label>
+        <input type="range" id="d" min="0.10" max="0.40" step="0.01" value="0.10" onchange="calc()" oninput="calc()">
+
+        <label>Conicidad: <span class="val" id="c_v">0.02</span></label>
+        <input type="range" id="c" min="0.02" max="0.10" step="0.01" value="0.02" onchange="calc()" oninput="calc()">
+
+        <label>Curvatura: <span class="val" id="curv_v">Leve</span></label>
+        <input type="range" id="curv" min="1" max="3" value="1" onchange="calc()" oninput="calc()">
+
+        <label>Torque: <span class="val" id="torque_v">1.0</span></label>
+        <input type="range" id="torque" min="1" max="5" step="0.1" value="1.0" onchange="calc()" oninput="calc()">
+
+        <label>Tiempo (seg): <span class="val" id="t_v">0</span></label>
+        <input type="range" id="t" min="0" max="120" value="0" onchange="manualTime()" oninput="manualTime()">
+
+        <button id="btn-toggle" onclick="toggleTimer()">▶ INICIAR CRONÓMETRO</button>
     </div>
 
     <div id="res">
-        <span class="status-text" id="status_label">LISTO</span>
-        <span class="rul-big" id="rul_val">10</span>
-        <span style="font-size: 0.9rem;">USOS RESTANTES</span>
-        <div id="score_mini" style="font-size: 0.7rem; margin-top: 8px;">Fatiga: 0.0%</div>
+        <span class="status" id="st">LISTO</span>
+        <span class="big" id="rul">10</span>
+        <span>USOS RESTANTES</span>
+        <div id="fatiga" style="font-size: 0.8rem; margin-top:10px;">Fatiga: 0.0%</div>
     </div>
 
-    <button class="btn-save" id="btn-save">💾 GUARDAR CICLO</button>
+    <button class="btn-save" onclick="guardar()">💾 GUARDAR REGISTRO</button>
 
-    <div class="card-panel">
-        <h3>Estadísticas y Registro</h3>
-        <div class="dashboard" id="dashboard"></div>
-        <div class="historial" id="historial"></div>
-        <button style="background:none; color:#e74c3c; width:100%; font-size:0.7rem; margin-top:15px;" id="btn-clear">🗑️ BORRAR TODO</button>
+    <div class="card">
+        <h3>Historial</h3>
+        <div id="lista" class="hist"></div>
+        <button style="background:none; color:red; font-size:0.7rem; margin-top:10px;" onclick="borrar()">BORRAR TODO</button>
     </div>
-
-    <footer>
-        © 2026 Christian Nole<br>
-        Validado para M-Wire RISING
-    </footer>
 </div>
 
 <script>
-// VARIABLES GLOBALES (Estilo Antiguo)
-var db;
+// VARIABLES GLOBALES (ES5 compatible con iPad mini 1)
 var tiempo = 0;
-var running = false;
-var lastTime = 0;
+var corriendo = false;
+var timerRef = null;
+var db = null;
 
-// Referencias a elementos
-var elD = document.getElementById("d");
-var elC = document.getElementById("c");
-var elCurv = document.getElementById("curv");
-var elT = document.getElementById("t");
-var elTorque = document.getElementById("torque");
-
-// Inicializar Base de Datos
-var request = window.indexedDB.open("EndoLegacyDB", 1);
+// Inicializar DB
+var request = window.indexedDB.open("EndoLegacyDB", 2);
 request.onupgradeneeded = function(e) {
-    db = e.target.result;
-    db.createObjectStore("casos", { keyPath: "id", autoIncrement: true });
+    var dbase = e.target.result;
+    if(!dbase.objectStoreNames.contains("casos")) {
+        dbase.createObjectStore("casos", { keyPath: "id", autoIncrement: true });
+    }
 };
-request.onsuccess = function(e) {
-    db = e.target.result;
-    cargarHistorial();
-};
-
-function getCurvText(v) {
-    if(v == 1) return "Leve";
-    if(v == 2) return "Moderada";
-    return "Severa";
-}
+request.onsuccess = function(e) { db = e.target.result; mostrar(); };
 
 function calc() {
-    var dv = parseFloat(elD.value);
-    var cv = parseFloat(elC.value);
-    var tv = parseFloat(elTorque.value);
-    var curvVal = parseInt(elCurv.value);
+    var ISO = parseFloat(document.getElementById("d").value);
+    var CON = parseFloat(document.getElementById("c").value);
+    var CRV = parseInt(document.getElementById("curv").value);
+    var TRQ = parseFloat(document.getElementById("torque").value);
     
-    var fCurv = 1.0;
-    if(curvVal == 2) fCurv = 1.5;
-    if(curvVal == 3) fCurv = 2.2;
+    var fCurva = 1.0;
+    var tCurva = "Leve";
+    if(CRV == 2) { fCurva = 1.5; tCurva = "Moderada"; }
+    if(CRV == 3) { fCurva = 2.2; tCurva = "Severa"; }
 
-    document.getElementById("d_val").innerHTML = dv.toFixed(2);
-    document.getElementById("c_val").innerHTML = cv.toFixed(2);
-    document.getElementById("torque_val").innerHTML = tv.toFixed(1);
-    document.getElementById("t_val").innerHTML = tiempo;
-    document.getElementById("curv_val").innerHTML = getCurvText(curvVal);
-    elT.value = tiempo;
+    document.getElementById("d_v").innerHTML = ISO.toFixed(2);
+    document.getElementById("c_v").innerHTML = CON.toFixed(2);
+    document.getElementById("torque_v").innerHTML = TRQ.toFixed(1);
+    document.getElementById("t_v").innerHTML = tiempo;
+    document.getElementById("curv_v").innerHTML = tCurva;
+    document.getElementById("t").value = tiempo;
 
-    var T_val = Math.pow(tiempo / 60, 1.3);
-    var Tor_val = tv / 5;
-    var G_val = ((dv - 0.20) / 0.20 + (cv - 0.02) / 0.08) / 2;
+    // Fórmulas
+    var fTiempo = Math.pow(tiempo / 60, 1.3);
+    var fTorque = TRQ / 5;
+    var fGeom = ((ISO - 0.20) / 0.20 + (CON - 0.02) / 0.08) / 2;
     
-    var score = 100 * (0.45 * T_val + 0.30 * Tor_val + 0.25 * G_val);
-    score = score * fCurv;
+    var score = 100 * (0.45 * fTiempo + 0.30 * fTorque + 0.25 * fGeom);
+    score = score * fCurva;
     if (score > 100) score = 100;
+    if (score < 0) score = 0;
 
     var rul = Math.floor((100 - score) / 10);
-    var estado = "REUTILIZABLE";
     var color = "#27ae60";
+    var estado = "REUTILIZABLE";
     
-    if(rul < 6) { estado = "PRECAUCIÓN"; color = "#f39c12"; }
-    if(rul < 3) { estado = "ÚLTIMO USO"; color = "#e67e22"; }
-    if(rul < 1) { estado = "DESCARTAR"; color = "#2c3e50"; rul = 0; }
+    if(rul < 6) { color = "#f39c12"; estado = "PRECAUCIÓN"; }
+    if(rul < 3) { color = "#e67e22"; estado = "CRÍTICO"; }
+    if(rul < 1) { color = "#2c3e50"; estado = "DESCARTAR"; rul = 0; }
 
     document.getElementById("res").style.backgroundColor = color;
-    document.getElementById("rul_val").innerHTML = rul;
-    document.getElementById("status_label").innerHTML = estado;
-    document.getElementById("score_mini").innerHTML = "Índice de Fatiga: " + score.toFixed(1) + "%";
-
-    return { score: score, rul: rul, estado: estado };
+    document.getElementById("rul").innerHTML = rul;
+    document.getElementById("st").innerHTML = estado;
+    document.getElementById("fatiga").innerHTML = "Índice de Fatiga: " + score.toFixed(1) + "%";
+    
+    return { s: score, r: rul, e: estado };
 }
 
-function tick() {
-    if (!running) return;
-    var now = new Date().getTime();
-    if (now - lastTime >= 1000) {
-        tiempo++;
-        calc();
-        lastTime = now;
-    }
-    setTimeout(tick, 100);
-}
-
-document.getElementById("btn-toggle").onclick = function() {
-    if (!running) {
-        running = true;
-        this.innerHTML = "⏸ PAUSAR";
-        this.style.backgroundColor = "#e74c3c";
-        lastTime = new Date().getTime();
-        tick();
+function toggleTimer() {
+    var btn = document.getElementById("btn-toggle");
+    if(!corriendo) {
+        corriendo = true;
+        btn.innerHTML = "⏸ PAUSAR";
+        btn.style.backgroundColor = "#e74c3c";
+        timerRef = setInterval(function() {
+            tiempo++;
+            calc();
+        }, 1000);
     } else {
-        running = false;
-        this.innerHTML = "▶ REANUDAR";
-        this.style.backgroundColor = "#3498db";
+        corriendo = false;
+        btn.innerHTML = "▶ REANUDAR";
+        btn.style.backgroundColor = "#3498db";
+        clearInterval(timerRef);
     }
-};
+}
 
-document.getElementById("btn-reset").onclick = function() {
-    running = false;
-    tiempo = 0;
-    elD.value = 0.10; elC.value = 0.02; elCurv.value = 1; elT.value = 0; elTorque.value = 1.0;
-    document.getElementById("btn-toggle").innerHTML = "▶ INICIAR";
-    document.getElementById("btn-toggle").style.backgroundColor = "#3498db";
+function manualTime() {
+    tiempo = parseInt(document.getElementById("t").value);
     calc();
-};
+}
 
-document.getElementById("btn-save").onclick = function() {
-    var res = calc();
+function guardar() {
+    var r = calc();
     var tx = db.transaction("casos", "readwrite");
     var store = tx.objectStore("casos");
     store.add({
         fecha: new Date().toLocaleString(),
-        tiempo: tiempo,
-        d: elD.value,
-        c: elC.value,
-        score: res.score,
-        rul: res.rul,
-        estado: res.estado
+        iso: document.getElementById("d").value,
+        con: document.getElementById("c").value,
+        fatiga: r.s.toFixed(1),
+        usos: r.r
     });
-    tx.oncomplete = function() { cargarHistorial(); };
-};
+    tx.oncomplete = function() { mostrar(); };
+}
 
-function cargarHistorial() {
+function mostrar() {
     var tx = db.transaction("casos", "readonly");
     var store = tx.objectStore("casos");
     var req = store.getAll();
     req.onsuccess = function() {
         var data = req.result;
         var html = "";
-        var totalFatiga = 0;
         for (var i = data.length - 1; i >= 0; i--) {
-            var item = data[i];
-            totalFatiga += item.score;
-            html += '<div class="hist-row"><strong>Lima ' + item.d + '/' + item.c + '</strong><br>' +
-                    '<small>' + item.fecha + ' | Restan: ' + item.rul + '</small></div>';
+            html += "<div><strong>Lima " + data[i].iso + "/" + data[i].con + "</strong> - Fatiga: " + data[i].fatiga + "%</div>";
         }
-        document.getElementById("historial").innerHTML = html || "Sin registros";
-        var prom = data.length ? (totalFatiga / data.length).toFixed(1) : 0;
-        document.getElementById("dashboard").innerHTML = 
-            '<div class="dash-item"><strong>' + data.length + '</strong><br>Ciclos</div>' +
-            '<div class="dash-item"><strong>' + prom + '%</strong><br>Fatiga Prom.</div>';
+        document.getElementById("lista").innerHTML = html || "No hay registros";
     };
 }
 
-document.getElementById("btn-clear").onclick = function() {
-    if (confirm("¿Borrar todo?")) {
+function borrar() {
+    if(confirm("¿Borrar historial?")) {
         var tx = db.transaction("casos", "readwrite");
         tx.objectStore("casos").clear();
-        tx.oncomplete = function() {
+        tx.oncomplete = function() { mostrar(); };
+    }
+}
+
+// Iniciar
+calc();
+</script>
+</body>
+</html>
