@@ -3,183 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>EndoFile Risk LEGACY</title>
 
 <style>
-/* CSS simplificado para navegadores antiguos */
-body { 
-    font-family: Helvetica, Arial, sans-serif; 
-    margin: 0; background: #f8f9fa; color: #2c3e50; line-height: 1.4;
-}
-
-header { 
-    background: #2c3e50; color: white; padding: 12px; text-align: center; 
-    font-weight: bold; font-size: 1.1rem;
-}
-
+body { font-family: Helvetica, Arial, sans-serif; margin: 0; background: #f8f9fa; color: #2c3e50; }
+header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; }
 .container { padding: 10px; max-width: 400px; margin: auto; }
-
-.card-panel {
-    background: #ffffff; padding: 12px; border-radius: 8px;
-    border: 1px solid #ddd; margin-bottom: 12px;
-}
-
-h3 { margin-top: 0; font-size: 0.7rem; text-transform: uppercase; color: #7f8c8d; }
-
-.control { margin-bottom: 12px; }
-label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85rem; overflow: hidden; }
-.val-badge { float: right; background: #edf2f7; padding: 1px 5px; border-radius: 4px; color: #3498db; }
-
-input[type="range"] { width: 100%; margin: 8px 0; }
-
-button { 
-    display: block; width: 100%; border: none; padding: 12px; 
-    border-radius: 8px; font-weight: bold; cursor: pointer; 
-    font-size: 0.85rem; margin-bottom: 8px;
-}
-
+.card-panel { background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; }
+h3 { margin: 0 0 10px 0; font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; }
+.control { margin-bottom: 15px; }
+label { display: block; font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; }
+.val-badge { float: right; color: #3498db; font-weight: bold; }
+input[type="range"] { width: 100%; margin: 10px 0; }
+button { display: block; width: 100%; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 1rem; margin-bottom: 10px; cursor: pointer; }
 #btn-toggle { background: #3498db; color: white; }
 .btn-secondary { background: #ecf0f1; color: #2c3e50; }
-.btn-save { background: #27ae60; color: white; }
-
-#res { 
-    padding: 15px; border-radius: 12px; color: white; text-align: center; 
-    margin: 12px 0; background: #27ae60;
-}
-
-.rul-big { font-size: 2.8rem; font-weight: bold; display: block; }
-.status-text { font-weight: bold; text-transform: uppercase; font-size: 0.75rem; }
-
-.dashboard { overflow: hidden; font-size: 0.8rem; }
-.dash-item { float: left; width: 45%; background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center; margin: 2%; }
-
-.historial { max-height: 180px; overflow-y: auto; font-size: 0.7rem; border-top: 1px solid #eee; padding-top: 8px; }
-.hist-row { padding: 6px 0; border-bottom: 1px solid #f1f1f1; }
-.hist-main { font-weight: bold; margin-bottom: 2px; }
-.hist-sub { color: #7f8c8d; font-size: 0.6rem; }
-
-footer { text-align: center; font-size: 0.65rem; color: #95a5a6; padding: 20px 10px; }
+.btn-save { background: #27ae60; color: white; margin-top: 10px; }
+#res { padding: 20px; border-radius: 15px; color: white; text-align: center; margin-bottom: 15px; background: #27ae60; }
+.rul-big { font-size: 3.5rem; font-weight: bold; display: block; }
+.status-text { font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+.dashboard { overflow: hidden; margin-top: 10px; }
+.dash-item { float: left; width: 44%; background: #f1f1f1; padding: 10px; border-radius: 8px; text-align: center; margin: 2%; font-size: 0.8rem; }
+.historial { max-height: 200px; overflow-y: auto; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: 10px; }
+.hist-row { padding: 10px 0; border-bottom: 1px solid #eee; }
+footer { text-align: center; font-size: 0.7rem; color: #95a5a6; padding: 20px; }
 </style>
 </head>
 
 <body>
-
-<header>🦷 EndoFile Risk v1.0 (Legacy)</header>
-
+<header>🦷 EndoFile Risk v1.0 Legacy</header>
 <div class="container">
-
     <div class="card-panel">
-        <h3>Configuración</h3>
-        
+        <h3>Ajustes de Lima</h3>
         <div class="control">
-            <label>Diámetro ISO <span class="val-badge" id="d_val">0.10</span></label>
-            <input type="range" id="d" min="0.10" max="0.40" step="0.01" value="0.10" oninput="calc()">
+            <label>Diámetro ISO: <span class="val-badge" id="d_val">0.10</span></label>
+            <input type="range" id="d" min="0.10" max="0.40" step="0.01" value="0.10">
         </div>
-
         <div class="control">
-            <label>Conicidad <span class="val-badge" id="c_val">0.02</span></label>
-            <input type="range" id="c" min="0.02" max="0.10" step="0.01" value="0.02" oninput="calc()">
+            <label>Conicidad: <span class="val-badge" id="c_val">0.02</span></label>
+            <input type="range" id="c" min="0.02" max="0.10" step="0.01" value="0.02">
         </div>
-
         <div class="control">
-            <label>Curvatura <span class="val-badge" id="curv_val">Leve</span></label>
-            <input type="range" id="curv" min="1" max="3" value="1" oninput="calc()">
+            <label>Curvatura: <span class="val-badge" id="curv_val">Leve</span></label>
+            <input type="range" id="curv" min="1" max="3" value="1">
         </div>
-
         <div class="control">
-            <label>Torque (Ncm) <span class="val-badge" id="torque_val">1.0</span></label>
-            <input type="range" id="torque" min="1" max="5" step="0.1" value="1.0" oninput="calc()">
+            <label>Torque (Ncm): <span class="val-badge" id="torque_val">1.0</span></label>
+            <input type="range" id="torque" min="1" max="5" step="0.1" value="1.0">
         </div>
-
         <div class="control">
-            <label>Tiempo (seg) <span class="val-badge" id="t_val">0</span></label>
-            <input type="range" id="t" min="0" max="120" value="0" oninput="setManualTime()">
+            <label>Tiempo (seg): <span class="val-badge" id="t_val">0</span></label>
+            <input type="range" id="t" min="0" max="120" value="0">
         </div>
-
-        <button id="btn-toggle" onclick="toggleTimer()">▶ INICIAR CRONÓMETRO</button>
-        <button class="btn-secondary" onclick="reset()">🔄 REINICIAR</button>
+        <button id="btn-toggle">▶ INICIAR CRONÓMETRO</button>
+        <button class="btn-secondary" id="btn-reset">🔄 REINICIAR</button>
     </div>
 
     <div id="res">
         <span class="status-text" id="status_label">LISTO</span>
         <span class="rul-big" id="rul_val">10</span>
-        <span style="font-size: 0.7rem;">USOS RESTANTES</span>
-        <div id="score_mini" style="font-size: 0.6rem; margin-top: 5px;">Índice de Fatiga: 0.0%</div>
+        <span style="font-size: 0.9rem;">USOS RESTANTES</span>
+        <div id="score_mini" style="font-size: 0.7rem; margin-top: 8px;">Fatiga: 0.0%</div>
     </div>
 
-    <button class="btn-save" onclick="guardarCaso()">💾 GUARDAR CICLO</button>
+    <button class="btn-save" id="btn-save">💾 GUARDAR CICLO</button>
 
     <div class="card-panel">
-        <h3>Estadísticas</h3>
+        <h3>Estadísticas y Registro</h3>
         <div class="dashboard" id="dashboard"></div>
-    </div>
-
-    <div class="card-panel">
-        <h3>Registro</h3>
         <div class="historial" id="historial"></div>
-        <button style="background:none; color:#3498db; width:100%; font-size:0.6rem; margin-top:10px;" onclick="exportarCSV()">DESCARGAR CSV</button>
-        <button style="background:none; color:#e74c3c; width:100%; font-size:0.6rem; margin-top:5px;" onclick="borrarHistorial()">BORRAR TODO</button>
+        <button style="background:none; color:#e74c3c; width:100%; font-size:0.7rem; margin-top:15px;" id="btn-clear">🗑️ BORRAR TODO</button>
     </div>
 
     <footer>
-        © 2026 Desarrollado por Christian Nole<br>
-        Optimizado para iPad mini 1 (M-Wire RISING)
+        © 2026 Christian Nole<br>
+        Validado para M-Wire RISING
     </footer>
-
 </div>
 
 <script>
-// JavaScript compatible con ES5 (iOS 9)
+// VARIABLES GLOBALES (Estilo Antiguo)
 var db;
-var request = indexedDB.open("EndoLegacyDB", 1);
+var tiempo = 0;
+var running = false;
+var lastTime = 0;
 
+// Referencias a elementos
+var elD = document.getElementById("d");
+var elC = document.getElementById("c");
+var elCurv = document.getElementById("curv");
+var elT = document.getElementById("t");
+var elTorque = document.getElementById("torque");
+
+// Inicializar Base de Datos
+var request = window.indexedDB.open("EndoLegacyDB", 1);
 request.onupgradeneeded = function(e) {
     db = e.target.result;
     db.createObjectStore("casos", { keyPath: "id", autoIncrement: true });
 };
-
 request.onsuccess = function(e) {
     db = e.target.result;
     cargarHistorial();
 };
 
-var tiempo = 0;
-var running = false;
-var lastTime = 0;
-
-var d = document.getElementById("d");
-var c = document.getElementById("c");
-var curv = document.getElementById("curv");
-var t = document.getElementById("t");
-var torque = document.getElementById("torque");
-var btnToggle = document.getElementById("btn-toggle");
-
-function getCurv(v) {
-    if(v == 1) return { f: 1.0, txt: "Leve" };
-    if(v == 2) return { f: 1.5, txt: "Moderada" };
-    return { f: 2.2, txt: "Severa" };
+function getCurvText(v) {
+    if(v == 1) return "Leve";
+    if(v == 2) return "Moderada";
+    return "Severa";
 }
 
 function calc() {
-    var dv = parseFloat(d.value);
-    var cv = parseFloat(c.value);
-    var tv = parseFloat(torque.value);
-    var cur = getCurv(parseInt(curv.value));
+    var dv = parseFloat(elD.value);
+    var cv = parseFloat(elC.value);
+    var tv = parseFloat(elTorque.value);
+    var curvVal = parseInt(elCurv.value);
+    
+    var fCurv = 1.0;
+    if(curvVal == 2) fCurv = 1.5;
+    if(curvVal == 3) fCurv = 2.2;
 
     document.getElementById("d_val").innerHTML = dv.toFixed(2);
     document.getElementById("c_val").innerHTML = cv.toFixed(2);
     document.getElementById("torque_val").innerHTML = tv.toFixed(1);
     document.getElementById("t_val").innerHTML = tiempo;
-    document.getElementById("curv_val").innerHTML = cur.txt;
-    
-    t.value = tiempo;
+    document.getElementById("curv_val").innerHTML = getCurvText(curvVal);
+    elT.value = tiempo;
 
     var T_val = Math.pow(tiempo / 60, 1.3);
     var Tor_val = tv / 5;
     var G_val = ((dv - 0.20) / 0.20 + (cv - 0.02) / 0.08) / 2;
     
     var score = 100 * (0.45 * T_val + 0.30 * Tor_val + 0.25 * G_val);
-    score = score * cur.f;
+    score = score * fCurv;
     if (score > 100) score = 100;
 
     var rul = Math.floor((100 - score) / 10);
@@ -198,60 +155,55 @@ function calc() {
     return { score: score, rul: rul, estado: estado };
 }
 
-function loop() {
+function tick() {
     if (!running) return;
-    var now = Date.now();
+    var now = new Date().getTime();
     if (now - lastTime >= 1000) {
         tiempo++;
         calc();
         lastTime = now;
     }
-    setTimeout(loop, 100); // Usamos setTimeout para mejor estabilidad en iOS 9
+    setTimeout(tick, 100);
 }
 
-function toggleTimer() {
+document.getElementById("btn-toggle").onclick = function() {
     if (!running) {
         running = true;
-        btnToggle.innerHTML = "⏸ PAUSAR";
-        btnToggle.style.backgroundColor = "#e74c3c";
-        lastTime = Date.now();
-        loop();
+        this.innerHTML = "⏸ PAUSAR";
+        this.style.backgroundColor = "#e74c3c";
+        lastTime = new Date().getTime();
+        tick();
     } else {
         running = false;
-        btnToggle.innerHTML = "▶ REANUDAR";
-        btnToggle.style.backgroundColor = "#3498db";
+        this.innerHTML = "▶ REANUDAR";
+        this.style.backgroundColor = "#3498db";
     }
-}
+};
 
-function setManualTime() {
-    tiempo = parseInt(t.value);
-    calc();
-}
-
-function reset() {
+document.getElementById("btn-reset").onclick = function() {
     running = false;
     tiempo = 0;
-    d.value = 0.10; c.value = 0.02; curv.value = 1; t.value = 0; torque.value = 1.0;
-    btnToggle.innerHTML = "▶ INICIAR";
-    btnToggle.style.backgroundColor = "#3498db";
+    elD.value = 0.10; elC.value = 0.02; elCurv.value = 1; elT.value = 0; elTorque.value = 1.0;
+    document.getElementById("btn-toggle").innerHTML = "▶ INICIAR";
+    document.getElementById("btn-toggle").style.backgroundColor = "#3498db";
     calc();
-}
+};
 
-function guardarCaso() {
-    var data = calc();
+document.getElementById("btn-save").onclick = function() {
+    var res = calc();
     var tx = db.transaction("casos", "readwrite");
     var store = tx.objectStore("casos");
     store.add({
         fecha: new Date().toLocaleString(),
-        tiempo: tiempo, 
-        diametro: d.value, 
-        conicidad: c.value, 
-        score: data.score, 
-        rul: data.rul, 
-        estado: data.estado
+        tiempo: tiempo,
+        d: elD.value,
+        c: elC.value,
+        score: res.score,
+        rul: res.rul,
+        estado: res.estado
     });
     tx.oncomplete = function() { cargarHistorial(); };
-}
+};
 
 function cargarHistorial() {
     var tx = db.transaction("casos", "readonly");
@@ -260,56 +212,23 @@ function cargarHistorial() {
     req.onsuccess = function() {
         var data = req.result;
         var html = "";
-        var sumaScore = 0;
-        
+        var totalFatiga = 0;
         for (var i = data.length - 1; i >= 0; i--) {
             var item = data[i];
-            sumaScore += item.score;
-            html += '<div class="hist-row"><div class="hist-main">' +
-                    '<span>Lima ' + item.diametro + '/' + item.conicidad + '</span>' +
-                    '<span style="float:right">Restan: ' + item.rul + '</span></div>' +
-                    '<div class="hist-sub">' + item.fecha + ' | ' + item.estado + '</div></div>';
+            totalFatiga += item.score;
+            html += '<div class="hist-row"><strong>Lima ' + item.d + '/' + item.c + '</strong><br>' +
+                    '<small>' + item.fecha + ' | Restan: ' + item.rul + '</small></div>';
         }
-        
         document.getElementById("historial").innerHTML = html || "Sin registros";
-        
-        var promedio = data.length ? (sumaScore / data.length).toFixed(1) : 0;
+        var prom = data.length ? (totalFatiga / data.length).toFixed(1) : 0;
         document.getElementById("dashboard").innerHTML = 
             '<div class="dash-item"><strong>' + data.length + '</strong><br>Ciclos</div>' +
-            '<div class="dash-item"><strong>' + promedio + '%</strong><br>Fatiga Prom.</div>';
+            '<div class="dash-item"><strong>' + prom + '%</strong><br>Fatiga Prom.</div>';
     };
 }
 
-function borrarHistorial() {
+document.getElementById("btn-clear").onclick = function() {
     if (confirm("¿Borrar todo?")) {
         var tx = db.transaction("casos", "readwrite");
         tx.objectStore("casos").clear();
-        tx.oncomplete = function() { cargarHistorial(); };
-    }
-}
-
-function exportarCSV() {
-    var tx = db.transaction("casos", "readonly");
-    var store = tx.objectStore("casos");
-    var req = store.getAll();
-    req.onsuccess = function() {
-        var data = req.result;
-        var csv = "tipo_lima,usos_restantes,fatiga\n";
-        for (var i = 0; i < data.length; i++) {
-            var item = data[i];
-            csv += item.diametro + "/" + item.conicidad + "," + item.rul + "," + item.score.toFixed(1) + "%\n";
-        }
-        var blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "EndoLegacy_Data.csv";
-        a.click();
-    };
-}
-
-calc();
-</script>
-
-</body>
-</html>
+        tx.oncomplete = function() {
